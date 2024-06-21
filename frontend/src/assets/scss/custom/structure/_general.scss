@@ -1,0 +1,22 @@
+//
+// general.scss
+//
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.text-break-all {
+  word-break: break-all !important;
+}
+
+._loading_overlay_content.css-42igfv {
+  position: fixed;
+  top: 50%;
+  right: 43%;
+}

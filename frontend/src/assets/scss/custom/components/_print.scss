@@ -1,0 +1,187 @@
+@page {
+	size: A4;
+	margin: 0 !important;
+	.printcoupons {
+		size: A4 landscape;
+	}
+}
+@media print {
+	hr,
+	.left-side-menu,
+	.right-bar,
+	.page-title-box,
+	.navbar-custom,
+	.footer,
+	.print-hide,
+	.action,
+	.topnav,
+	.btn-print,
+	footer,
+	.content .container-fluid .row .wrap-filter,
+	.content .container-fluid .row .page-title-box,
+	.content
+		.container-fluid
+		.row
+		.col
+		.card-custom.card
+		.card-body
+		.table-customer,
+	.content .container-fluid .row .table-user-bottom,
+	.mt-0,
+	.title-popup {
+		display: none !important;
+	}
+	.card-custom.card,
+	.card-custom.card-custom .card-body {
+		border: none;
+	}
+	.card-body,
+	.content-page,
+	.right-bar,
+	.content,
+	body {
+		padding: 0;
+		margin: 0;
+	}
+	.card,
+	.item-print {
+		border: none !important;
+		padding: 0px !important;
+		margin-bottom: 0px !important;
+	}
+	.wrap-order-detail,
+	.print-show {
+		border: none !important;
+		width: 100% !important;
+	}
+	.table-responsive {
+		overflow-x: auto !important;
+	}
+	.printf-form-table {
+		.trackingAmount {
+			padding: 6px !important;
+			width: 5% !important;
+			white-space: normal !important;
+			min-width: 10px !important;
+			text-align: center;
+		}
+		.weight,
+		.trackingShippingCost,
+		.trackingShippingFee,
+		.trackingOtherFee,
+		.trackingSurcharge,
+		.trackingDeliveryFee,
+		.trackingTotalMoney {
+			padding: 6px !important;
+			min-width: 10px !important;
+			width: 7% !important;
+			white-space: normal !important;
+			text-align: center;
+		}
+		.orderId,
+		.code,
+		.productName,
+		.createdAt {
+			padding: 6px !important;
+			width: 12% !important;
+			min-width: 10px !important;
+			white-space: normal !important;
+			text-align: center;
+		}
+		.action {
+			display: none;
+		}
+		.data-table-text {
+			padding: 6px !important;
+			white-space: normal !important;
+			text-align: center;
+			word-break: break-all;
+		}
+	}
+	.card-body,
+	thead {
+		border: 1px solid rgb(226 231 241);
+	}
+	.print-value-form {
+		width: 100% !important;
+		padding-bottom: 6px !important;
+		span,
+		p {
+			margin: 0px !important;
+		}
+	}
+	.box-custom {
+		border: none !important;
+		padding: 0px;
+	}
+	.table-tracking-print {
+		margin-top: 0.5rem !important;
+		margin-bottom: 1rem !important;
+	}
+	.money-print {
+		margin-bottom: 0.5rem;
+	}
+	.signature-print {
+		margin-top: 0.5rem !important;
+	}
+	.info-customer-create-bill {
+		margin-left: 1rem;
+	}
+	.data-table-text {
+		font-size: 14px;
+	}
+	html, body {
+		width: 100%;
+		height: 100%;
+		padding: 0;
+		margin: 0;
+	}
+}
+.deliveryslip-wrap {
+	page-break-inside: avoid;
+}
+.wrapper-print-delivery {
+	width: fit-content;
+	border: 1px solid #d4d1cd;
+	margin-right: -6px;
+
+	.box-wrapper {
+		padding: 8px;
+		border-bottom: 1px solid #d4d1cd;
+		.print-delivery-order {
+			padding: 8px;
+			width: fit-content;
+
+			svg {
+				box-sizing: border-box;
+				border-radius: 8px;
+				border: 1px solid #d4d1cd;
+				transform: translate(0, 0);
+				padding: 2px;
+			}
+		}
+	}
+}
+
+.wrapper-print-order-bill {
+	border: 1px solid #d4d1cd;
+	margin-right: -6px;
+	width: fit-content;
+
+	.box-wrapper {
+		padding: 8px;
+		border-bottom: 1px solid #d4d1cd;
+		width: -webkit-fill-available;
+		.print-delivery-order {
+			padding: 8px;
+
+			svg {
+				box-sizing: border-box;
+				border-radius: 8px;
+				border: 1px solid #d4d1cd;
+				transform: translate(0, 0);
+				padding: 2px;
+			}
+		}
+	}
+}
