@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { UsersModel } from "../interface/users";
+import passport from "passport";
 
 dotenv.config();
 
@@ -95,7 +96,20 @@ const register = async (req: Request, res: Response) => {
   }
 };
 
+const googleAuth = async (req: Request, res: Response) => {
+  passport.authenticate("google", { scope: ["email", "profile"] });
+};
+
+const googleAuthCallBack = async (req: Request, res: Response) => {
+  passport.authenticate("google", { failureRedirect: "/" }),
+    (req: Request, res: Response) => {
+      res.redirect("/");
+    };
+};
+
 export const AuthController = {
   login,
   register,
+  googleAuth,
+  googleAuthCallBack,
 };

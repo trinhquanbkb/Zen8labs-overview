@@ -5,3 +5,5 @@ export const authRouter = express.Router();
 
 authRouter.post("/login", AuthController.login);
 authRouter.post("/register", AuthController.register);
+authRouter.get("/google", AuthController.googleAuth);
+authRouter.get("/google/callback", )
