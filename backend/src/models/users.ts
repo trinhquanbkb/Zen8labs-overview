@@ -1,18 +1,29 @@
-"use strict";
-import { Model, DataTypes, Optional, Sequelize } from "sequelize";
+import { Model, DataTypes, Sequelize } from "sequelize";
 
-module.exports = (sequelize: Sequelize) => {
-  class Users extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models: any) {
-      this.belongsTo(models.Roles, { foreignKey: "role_id" });
-    }
+export class users extends Model {
+  public id!: number;
+  public first_name!: string;
+  public last_name!: string;
+  public nick_name!: string;
+  public email!: string;
+  public phone!: string;
+  public address!: string;
+  public password!: string;
+  public role_id!: number;
+  public deleted!: boolean;
+  public blocked!: boolean;
+  public facebook_auth!: boolean;
+  public google_auth!: boolean;
+  public created_at!: Date;
+  public updated_at!: Date;
+
+  public static associate(models: any) {
+    this.belongsTo(models.roles, { foreignKey: "role_id" });
   }
-  Users.init(
+}
+
+export default (sequelize: Sequelize) => {
+  users.init(
     {
       first_name: DataTypes.STRING,
       last_name: DataTypes.STRING,
@@ -26,11 +37,21 @@ module.exports = (sequelize: Sequelize) => {
       blocked: DataTypes.BOOLEAN,
       facebook_auth: DataTypes.BOOLEAN,
       google_auth: DataTypes.BOOLEAN,
+      created_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+      },
     },
     {
       sequelize,
-      modelName: "Users",
+      modelName: "users",
+      underscored: true,
     }
   );
-  return Users;
+
+  return users;
 };
