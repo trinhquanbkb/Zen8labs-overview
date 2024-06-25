@@ -2,17 +2,17 @@
 import { Model, DataTypes, Optional, Sequelize } from "sequelize";
 
 module.exports = (sequelize: Sequelize) => {
-  class Users extends Model {
+  class users extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models: any) {
-      this.belongsTo(models.Roles, { foreignKey: "role_id" });
+      this.belongsTo(models.roles, { foreignKey: "role_id" });
     }
   }
-  Users.init(
+  users.init(
     {
       first_name: DataTypes.STRING,
       last_name: DataTypes.STRING,
@@ -29,8 +29,8 @@ module.exports = (sequelize: Sequelize) => {
     },
     {
       sequelize,
-      modelName: "Users",
+      modelName: "users",
     }
   );
-  return Users;
+  return users;
 };

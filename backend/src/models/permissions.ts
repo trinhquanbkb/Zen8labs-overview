@@ -1,26 +1,35 @@
 "use strict";
-import { Model, DataTypes, Optional, Sequelize } from "sequelize";
+import { Model, DataTypes, Sequelize } from "sequelize";
 
-module.exports = (sequelize: Sequelize) => {
-  class Permissions extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models:any) {
-      // define association here
-    }
-  }
-  Permissions.init(
+export class permissions extends Model {
+  public id!: number;
+  public action!: string;
+  public description!: string;
+  public created_at!: Date;
+  public updated_at!: Date;
+
+  public static associate() {}
+}
+export default (sequelize: Sequelize) => {
+  permissions.init(
     {
       action: DataTypes.STRING,
       description: DataTypes.STRING,
+      created_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+      },
     },
     {
       sequelize,
-      modelName: "Permissions",
+      modelName: "permissions",
+      underscored: true,
     }
   );
-  return Permissions;
+
+  return permissions;
 };

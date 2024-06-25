@@ -9,7 +9,7 @@ const authenticate = async (
   try {
     // const token = req.header("token");
     // //giải mã (decode) token
-    // const decode = jwt.verify(token, "trinhhoangquan");
+    // const decode = jwt.verify(token, HASH_ACCESS_TOKEN);
     // if (decode) {
     //   req.user = decode;
     //   next();

@@ -1,27 +1,38 @@
 "use strict";
-import { Model, DataTypes, Optional, Sequelize } from "sequelize";
+import { Model, DataTypes, Sequelize } from "sequelize";
 
-module.exports = (sequelize: Sequelize) => {
-  class Roles extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models: any) {
-      Roles.hasMany(models.Users, {
-        foreignKey: "role_id",
-      });
-    }
+export class roles extends Model {
+  public id!: number;
+  public role!: string;
+  public created_at!: Date;
+  public updated_at!: Date;
+
+  public static associate(models: any) {
+    this.hasMany(models.users, {
+      foreignKey: "role_id",
+    });
   }
-  Roles.init(
+}
+
+export default (sequelize: Sequelize) => {
+  roles.init(
     {
       role: DataTypes.STRING,
+      created_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+      },
     },
     {
       sequelize,
-      modelName: "Roles",
+      modelName: "roles",
+      underscored: true,
     }
   );
-  return Roles;
+
+  return roles;
 };
