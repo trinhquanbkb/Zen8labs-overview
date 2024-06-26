@@ -2,9 +2,9 @@ import express from "express";
 import dotenv from "dotenv";
 import { rootRouter } from "./routers";
 import bodyParser = require("body-parser");
-import passport from "./middleware/passport";
 import cors from "cors";
 import session from "express-session";
+import passport from "passport";
 
 dotenv.config();
 const app = express();
@@ -21,6 +21,7 @@ app.use(
 // config passport
 app.use(passport.initialize());
 app.use(passport.session());
+require("./middleware/passport");
 
 app.use(cors());
 

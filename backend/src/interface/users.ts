@@ -10,8 +10,8 @@ export interface UsersModel {
   role_id: number;
   deleted?: boolean;
   blocked?: boolean;
-  facebook_auth?: boolean;
-  google_auth?: boolean;
+  facebook_auth?: string | null;
+  google_auth?: string | null;
 }
 
 export interface IUserResponse {
@@ -39,4 +39,6 @@ export interface IUserRequest {
   blocked?: boolean;
   created_at?: Date;
   updated_at?: Date;
+  facebook_auth?: string | null;
+  google_auth?: string | null;
 }

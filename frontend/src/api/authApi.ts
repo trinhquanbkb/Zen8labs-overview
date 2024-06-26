@@ -14,3 +14,10 @@ export const LoginRequest = async (username: string, password: string) => {
   );
   return response;
 };
+
+export const GoogleAuth = async () => {
+  const response = await axios.get(
+    `${process.env.REACT_APP_SERVER_HOST}/auth/google`
+  );
+  return response;
+};

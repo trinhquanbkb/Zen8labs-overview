@@ -48,12 +48,10 @@ module.exports = {
         defaultValue: false,
       },
       facebook_auth: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
+        type: Sequelize.STRING,
       },
       google_auth: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
+        type: Sequelize.STRING,
       },
       created_at: {
         allowNull: false,

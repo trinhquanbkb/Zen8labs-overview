@@ -12,8 +12,8 @@ export class users extends Model {
   public role_id!: number;
   public deleted!: boolean;
   public blocked!: boolean;
-  public facebook_auth!: boolean;
-  public google_auth!: boolean;
+  public facebook_auth!: string;
+  public google_auth!: string;
   public created_at!: Date;
   public updated_at!: Date;
 
@@ -35,8 +35,8 @@ export default (sequelize: Sequelize) => {
       role_id: DataTypes.INTEGER,
       deleted: DataTypes.BOOLEAN,
       blocked: DataTypes.BOOLEAN,
-      facebook_auth: DataTypes.BOOLEAN,
-      google_auth: DataTypes.BOOLEAN,
+      facebook_auth: DataTypes.STRING,
+      google_auth: DataTypes.STRING,
       created_at: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,

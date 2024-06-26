@@ -87,7 +87,12 @@ export default function Login() {
       </div>
       <Row>
         <Col xs={12} className="text-center">
-          <div className="btn btn-white mb-2 mb-sm-0 me-1">
+          <div
+            className="btn btn-white mb-2 mb-sm-0 me-1"
+            onClick={async () => {
+              window.open("http://localhost:3002/api/v1/auth/google", "_self");
+            }}
+          >
             <i className="uil uil-google icon-google me-2"></i>
             With Google
           </div>

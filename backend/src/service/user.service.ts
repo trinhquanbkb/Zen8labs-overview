@@ -1,7 +1,50 @@
 import { Request, Response } from "express";
 import db from "../models";
-import { IUserRequest } from "../interface/users";
+import { IUserRequest, UsersModel } from "../interface/users";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+interface DataStoredInToken {
+  id?: number;
+  first_name?: string;
+  last_name?: string;
+  nick_name?: string;
+}
+
+interface IRegisterUser {
+  first_name?: string;
+  last_name?: string;
+  nick_name?: string;
+  email: string;
+  password: string;
+  phone?: string;
+  address?: string;
+}
+
+const createToken = (user: UsersModel) => {
+  const HASH_ACCESS_TOKEN: string = process.env.HASH_ACCESS_TOKEN || "";
+  const HASH_REFRESH_TOKEN: string = process.env.HASH_REFRESH_TOKEN || "";
+
+  const dataStoredInToken: DataStoredInToken = {
+    id: user.id,
+    first_name: user.first_name,
+    last_name: user.last_name,
+    nick_name: user.nick_name,
+  };
+
+  const expiresIn = 60 * 5;
+  const access_token = jwt.sign(dataStoredInToken, HASH_ACCESS_TOKEN, {
+    expiresIn,
+  });
+  const refresh_token = jwt.sign(dataStoredInToken, HASH_REFRESH_TOKEN, {
+    expiresIn: expiresIn * 3600,
+  });
+
+  return { expiresIn, access_token, refresh_token };
+};
 
 const getDetailUser = async (req: IUserRequest) => {
   return await db.users.findOne({
@@ -25,4 +68,4 @@ const createUser = async (req: IUserRequest) => {
   }
 };
 
-export const UserService = { getDetailUser, getListUser, createUser };
+export const UserService = { getDetailUser, getListUser, createUser, createToken };
