@@ -24,6 +24,7 @@ authRouter.get(
     const token = UserService.createToken(req.user as UsersModel);
     res.cookie("access_token", token.access_token);
     res.cookie("refresh_token", token.refresh_token);
+    res.cookie("user_infor", token.dataStoredInToken);
     res.redirect(process.env.URL_REDIRECT_SUCCESS as string);
   }
 );

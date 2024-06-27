@@ -22,7 +22,16 @@ const login = async (req: Request, res: Response) => {
       );
       if (isAuthen === true) {
         const token = UserService.createToken(results.dataValues);
-        res.status(200).send({ message: "Login user success", token });
+        res
+          .status(200)
+          .send({
+            message: "Login user success",
+            token: {
+              expiresIn: token.expiresIn,
+              access_token: token.access_token,
+              refresh_token: token.refresh_token,
+            },
+          });
       } else {
         throw new Error(`Password is not exist`);
       }

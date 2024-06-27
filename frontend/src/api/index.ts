@@ -1,7 +1,7 @@
 import { BaseQueryFn } from "@reduxjs/toolkit/dist/query/baseQueryTypes";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
-// import { getAccessToken } from "../utils/getAccessToken";
+import { getAccessToken } from "../utils/getAccessToken";
 
 export interface List<D> {
   data: {
@@ -24,9 +24,10 @@ export const axiosBaseQuery =
     try {
       const newConfig = {
         ...configs,
-        // headers: {
-        //   Authorization: `Bearer ${getAccessToken()}`,
-        // },
+        url: `${baseUrl}${configs.url}`,
+        headers: {
+          Authorization: `Bearer ${getAccessToken()}`,
+        },
         params: {
           ...configs.params,
         },
@@ -51,6 +52,6 @@ const baseQuery = axiosBaseQuery({
 export const api = createApi({
   baseQuery: baseQuery,
   reducerPath: "api",
-  tagTypes: ["Auth"],
+  tagTypes: ["Auth", "User"],
   endpoints: () => ({}),
 });

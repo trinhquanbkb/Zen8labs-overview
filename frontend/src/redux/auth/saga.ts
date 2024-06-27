@@ -21,6 +21,7 @@ export const setSession = (key?: string, value?: any, httpOnly?: boolean) => {
       httpOnly: httpOnly,
     });
   else {
+    cookies.remove("user_infor", { path: "/" });
     cookies.remove("refresh_token", { path: "/" });
     cookies.remove("access_token", { path: "/" });
   }
@@ -37,10 +38,7 @@ function* login(action: { payload: { email: string; password: string } }) {
     setCredentials({
       access_token: access_token,
       refresh_token: refresh_token,
-      user_infor: {
-        data: authResponse.data.data,
-        role: authResponse.data.role,
-      },
+      user_infor: jwtDecode(access_token),
     });
     yield put(loginUserSuccess(jwtDecode(access_token)));
   } catch (err: any) {

@@ -9,6 +9,7 @@ export class users extends Model {
   public phone!: string;
   public address!: string;
   public password!: string;
+  public avatar!: string;
   public role_id!: number;
   public deleted!: boolean;
   public blocked!: boolean;
@@ -19,6 +20,9 @@ export class users extends Model {
 
   public static associate(models: any) {
     this.belongsTo(models.roles, { foreignKey: "role_id" });
+    this.hasMany(models.messages, {
+      foreignKey: "user_id",
+    });
   }
 }
 
@@ -32,6 +36,7 @@ export default (sequelize: Sequelize) => {
       phone: DataTypes.STRING,
       address: DataTypes.STRING,
       password: DataTypes.STRING,
+      avatar: DataTypes.STRING,
       role_id: DataTypes.INTEGER,
       deleted: DataTypes.BOOLEAN,
       blocked: DataTypes.BOOLEAN,

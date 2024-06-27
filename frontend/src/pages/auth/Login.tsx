@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Row, Col, Alert } from "react-bootstrap";
 import AuthLayout from "../../layouts/AuthLayout/AuthLayout";
 import VerticalForm from "../../components/VerticalForm";
@@ -7,6 +7,8 @@ import FeatherIcons from "feather-icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import { initLoginUser } from "../../redux/auth/reducers";
 import { AppDispatch, RootState } from "../../redux/store";
+import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 interface UserData {
   email: string;
@@ -15,13 +17,20 @@ interface UserData {
 
 export default function Login() {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const [cookies] = useCookies();
 
-  const { error } = useSelector((state: RootState) => ({
+  const { error, user, loading } = useSelector((state: RootState) => ({
     user: state.Auth.login.data.user,
     loading: state.Auth.login.loading,
     error: state.Auth.login.error,
-    userLoggedIn: state.Auth.login.data.user,
   }));
+
+  useEffect(() => {
+    if (user && !loading && !error && cookies.user_infor) {
+      navigate("/chat");
+    }
+  }, [user, loading, error, navigate, cookies]);
 
   const onSubmit = (formData: UserData) => {
     dispatch(
@@ -46,7 +55,7 @@ export default function Login() {
     <AuthLayout bottomLinks={<BottomLink />}>
       <h6 className="h5 mb-0 mt-3">Welcome back!</h6>
       <p className="text-muted mt-1 mb-4">
-        Enter your email address and password to access admin panel.
+        Enter your email address and password to access.
       </p>
 
       {error && (
@@ -57,7 +66,7 @@ export default function Login() {
 
       <VerticalForm<UserData>
         onSubmit={onSubmit}
-        defaultValues={{ email: "zen8labs.com", password: "test" }}
+        defaultValues={{ email: "zen8labs@gmail.com", password: "abcd1234" }}
         formClass="authentication-form"
       >
         <FormInput

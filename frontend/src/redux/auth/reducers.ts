@@ -60,6 +60,7 @@ const Auth = createSlice({
       } else {
         state.login.error = "Lỗi server!";
       }
+      state.login.data.user = null;
       state.login.loading = false;
     },
     verifyTokenForgotPassword: (

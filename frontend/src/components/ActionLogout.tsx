@@ -9,6 +9,8 @@ const ActionLogout = () => {
   useEffect(() => {
     if (!access_token) {
       navigate("/auth/login");
+    } else {
+      navigate("/chat");
     }
   }, [access_token, navigate]);
 

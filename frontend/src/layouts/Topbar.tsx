@@ -60,7 +60,9 @@ const Topbar = ({ topbarDark }: TopbarProps) => {
                 let cookies = new Cookies();
                 cookies.remove("refresh_token", { path: "/" });
                 cookies.remove("access_token", { path: "/" });
-
+                cookies.remove("user_infor", { path: "/" });
+                localStorage.clear();
+                
                 startTransition(() => {
                   navigate("/auth/login");
                 });
