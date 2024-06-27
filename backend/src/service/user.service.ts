@@ -1,7 +1,42 @@
-import { Request, Response } from "express";
 import db from "../models";
-import { IUserRequest } from "../interface/users";
+import { IUserRequest, UsersModel } from "../interface/users";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import { Op } from "sequelize";
+
+dotenv.config();
+
+interface DataStoredInToken {
+  id?: number;
+  first_name?: string;
+  last_name?: string;
+  nick_name?: string;
+  avatar?: string;
+}
+
+const createToken = (user: UsersModel) => {
+  const HASH_ACCESS_TOKEN: string = process.env.HASH_ACCESS_TOKEN || "";
+  const HASH_REFRESH_TOKEN: string = process.env.HASH_REFRESH_TOKEN || "";
+
+  const dataStoredInToken: DataStoredInToken = {
+    id: user.id,
+    first_name: user.first_name,
+    last_name: user.last_name,
+    nick_name: user.nick_name,
+    avatar: user.avatar,
+  };
+
+  const expiresIn = 60 * 15;
+  const access_token = jwt.sign(dataStoredInToken, HASH_ACCESS_TOKEN, {
+    expiresIn,
+  });
+  const refresh_token = jwt.sign(dataStoredInToken, HASH_REFRESH_TOKEN, {
+    expiresIn: expiresIn * 3600,
+  });
+
+  return { expiresIn, access_token, refresh_token, dataStoredInToken };
+};
 
 const getDetailUser = async (req: IUserRequest) => {
   return await db.users.findOne({
@@ -12,7 +47,27 @@ const getDetailUser = async (req: IUserRequest) => {
 };
 
 const getListUser = async (req: IUserRequest) => {
-  return await db.users.findAll({ where: { ...req } });
+  const users = await db.users.findAll({
+    where: { ...req },
+    attributes: { exclude: ["password"] },
+  });
+
+  return await Promise.all(
+    users.map(async (item: any) => {
+      const converstations_id = await db.conversations.findAll({
+        where: {
+          [Op.or]: [
+            { user_one: item.dataValues.id },
+            { user_two: item.dataValues.id },
+          ],
+        },
+      });
+      return {
+        ...item.dataValues,
+        converstations_id: converstations_id.map((c: any) => c.dataValues.id),
+      };
+    })
+  );
 };
 
 const createUser = async (req: IUserRequest) => {
@@ -25,4 +80,9 @@ const createUser = async (req: IUserRequest) => {
   }
 };
 
-export const UserService = { getDetailUser, getListUser, createUser };
+export const UserService = {
+  getDetailUser,
+  getListUser,
+  createUser,
+  createToken,
+};

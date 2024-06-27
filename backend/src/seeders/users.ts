@@ -24,8 +24,8 @@ module.exports = (sequelize: Sequelize) => {
       role_id: DataTypes.INTEGER,
       deleted: DataTypes.BOOLEAN,
       blocked: DataTypes.BOOLEAN,
-      facebook_auth: DataTypes.BOOLEAN,
-      google_auth: DataTypes.BOOLEAN,
+      facebook_auth: DataTypes.STRING,
+      google_auth: DataTypes.STRING,
     },
     {
       sequelize,

@@ -194,26 +194,86 @@
   border-radius: 12px;
   background-color: white;
   margin: 32px 12px 16px 12px;
-  min-height: 600px;
-  border: 1px solid burlywood;
+  height: 600px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 2px 12px 0 rgba(0, 0, 0, 0.19);
+
+  .top-chat {
+    border-bottom: 1px solid #e8e8e8;
+    height: 60px;
+  }
 
   .chat-socket {
     width: 100%;
-    min-height: inherit;
+    min-height: -webkit-fill-available;
     position: relative;
 
-    .form-input-chat {
-      width: 100%;
-      position: -webkit-sticky;
-      position: sticky;
-      bottom: 0;
+    .box-chat_message {
+      height: 492px;
+    }
+
+    .form-input-wrapper {
+      height: 48px;
+      .form-input-chat {
+        width: 100%;
+        position: -webkit-sticky;
+        position: sticky;
+        bottom: 0;
+      }
     }
   }
 }
 
-.chat-item {
+.chat-user-box {
+  padding: 4px;
+  border-radius: 8px;
+  background-color: white;
+  margin: 32px 12px 16px 12px;
+  min-height: 600px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 2px 8px 0 rgba(0, 0, 0, 0.19);
+
+  .chat-user-item {
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .chat-user-item:hover {
+    background-color: #f2f2f2;
+  }
+
+  .chat-name {
+    height: 22px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .chat-content {
+    height: 18px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    font-weight: 300;
+    font-size: 12px;
+  }
+}
+
+.chat-item.your-message {
+  max-width: 60%;
   border-radius: 6px;
-  margin: 10px 18px 0px 18px;
+  margin: 2px 18px 0px 18px;
+  color: rgb(0, 0, 0);
+  padding: 6px 8px;
+  background-color: #e1e1ebde;
+}
+
+.chat-item.other-people {
+  max-width: 60%;
+  border-radius: 6px;
+  margin: 2px 18px 0px 18px;
   color: white;
   padding: 6px 8px;
   background-color: #4c4cffde;

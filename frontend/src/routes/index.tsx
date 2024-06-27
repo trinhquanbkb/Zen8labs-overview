@@ -4,9 +4,8 @@ import { Route, RouteProps } from "react-router-dom";
 // root
 const Root = React.lazy(() => import("./Root"));
 
-
 // auth
-const Login = React.lazy(() => import('../pages/auth/Login'));
+const Login = React.lazy(() => import("../pages/auth/Login"));
 
 //error
 const Error404 = React.lazy(() => import("../pages/error/Error404"));
@@ -87,13 +86,10 @@ const flattenRoutes = (routes: RoutesProps[]) => {
 };
 
 // All routes
-const authProtectedRoutes = [rootRoute, ...projectAppRoutes, ...authRoutes];
-const publicRoutes = [...authRoutes, ...otherPublicRoutes];
+const publicRoutes = [rootRoute, ...projectAppRoutes, ...authRoutes];
+const authProtectedRoutes = [...authRoutes, ...otherPublicRoutes];
 
-const authProtectedFlattenRoutes = flattenRoutes([
-  ...authProtectedRoutes,
-  ...otherPublicRoutes,
-]);
+const authProtectedFlattenRoutes = flattenRoutes([...authProtectedRoutes]);
 const publicProtectedFlattenRoutes = flattenRoutes([...publicRoutes]);
 export {
   authProtectedFlattenRoutes,

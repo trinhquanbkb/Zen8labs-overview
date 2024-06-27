@@ -1,9 +1,14 @@
-import React from "react";
-import { Button, Row, Col } from "react-bootstrap";
+import React, { useEffect } from "react";
+import { Button, Row, Col, Alert } from "react-bootstrap";
 import AuthLayout from "../../layouts/AuthLayout/AuthLayout";
 import VerticalForm from "../../components/VerticalForm";
 import FormInput from "../../components/FormInput";
 import FeatherIcons from "feather-icons-react";
+import { useDispatch, useSelector } from "react-redux";
+import { initLoginUser } from "../../redux/auth/reducers";
+import { AppDispatch, RootState } from "../../redux/store";
+import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 interface UserData {
   email: string;
@@ -11,7 +16,30 @@ interface UserData {
 }
 
 export default function Login() {
-  const onSubmit = (formData: UserData) => {};
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const [cookies] = useCookies();
+
+  const { error, user, loading } = useSelector((state: RootState) => ({
+    user: state.Auth.login.data.user,
+    loading: state.Auth.login.loading,
+    error: state.Auth.login.error,
+  }));
+
+  useEffect(() => {
+    if (user && !loading && !error && cookies.user_infor) {
+      navigate("/chat");
+    }
+  }, [user, loading, error, navigate, cookies]);
+
+  const onSubmit = (formData: UserData) => {
+    dispatch(
+      initLoginUser({
+        email: formData["email"],
+        password: formData["password"],
+      })
+    );
+  };
 
   const BottomLink = () => {
     return (
@@ -27,12 +55,18 @@ export default function Login() {
     <AuthLayout bottomLinks={<BottomLink />}>
       <h6 className="h5 mb-0 mt-3">Welcome back!</h6>
       <p className="text-muted mt-1 mb-4">
-        Enter your email address and password to access admin panel.
+        Enter your email address and password to access.
       </p>
+
+      {error && (
+        <Alert variant="danger" className="my-2">
+          {error}
+        </Alert>
+      )}
 
       <VerticalForm<UserData>
         onSubmit={onSubmit}
-        defaultValues={{ email: "zen8labs.com", password: "test" }}
+        defaultValues={{ email: "zen8labs@gmail.com", password: "abcd1234" }}
         formClass="authentication-form"
       >
         <FormInput
@@ -48,25 +82,9 @@ export default function Login() {
           name="password"
           label={"Password"}
           startIcon={<FeatherIcons icon={"lock"} className="icon-dual" />}
-        //   action={
-            // <Link
-            //   to="/auth/forget-password"
-            //   className="float-end text-muted text-unline-dashed ms-1"
-            // >
-            //   {t("Forgot your password?")}
-            // </Link>
-        //   }
           placeholder={"Enter your Password"}
           containerClass={"mb-3"}
         ></FormInput>
-
-        <FormInput
-          type="checkbox"
-          name="checkbox"
-          label={"Remember me"}
-          containerClass={"mb-3"}
-          defaultChecked
-        />
 
         <div className="mb-3 text-center d-grid">
           <Button type="submit">Log In</Button>
@@ -78,7 +96,12 @@ export default function Login() {
       </div>
       <Row>
         <Col xs={12} className="text-center">
-          <div className="btn btn-white mb-2 mb-sm-0 me-1">
+          <div
+            className="btn btn-white mb-2 mb-sm-0 me-1"
+            onClick={async () => {
+              window.open("http://localhost:3002/api/v1/auth/google", "_self");
+            }}
+          >
             <i className="uil uil-google icon-google me-2"></i>
             With Google
           </div>
