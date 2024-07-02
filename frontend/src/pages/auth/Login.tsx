@@ -25,10 +25,13 @@ export default function Login() {
     loading: state.Auth.login.loading,
     error: state.Auth.login.error,
   }));
+  console.log(error, user, loading);
 
   useEffect(() => {
     if (user && !loading && !error && cookies.user_infor) {
       navigate("/chat");
+    } else {
+      navigate("/auth/login");
     }
   }, [user, loading, error, navigate, cookies]);
 

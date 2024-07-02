@@ -1,18 +1,19 @@
 import { useEffect } from "react";
-import { getAccessToken } from "../utils/getAccessToken";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 const ActionLogout = () => {
-  const access_token = getAccessToken();
+  const [cookies] = useCookies();
+  const accessToken = cookies.access_token;
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!access_token) {
+    if (!accessToken) {
       navigate("/auth/login");
     } else {
       navigate("/chat");
     }
-  }, [access_token, navigate]);
+  }, [cookies, accessToken, navigate]);
 
   return null;
 };

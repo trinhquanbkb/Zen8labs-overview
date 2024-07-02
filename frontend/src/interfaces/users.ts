@@ -15,3 +15,13 @@ export interface IUser {
   google_auth?: string | null;
   converstations_id: number[];
 }
+
+export interface UserInforCookie {
+  id: number;
+  first_name: string;
+  last_name: string;
+  nick_name: string;
+  avatar: string;
+  exp: number;
+  iat: number;
+}
