@@ -210,12 +210,17 @@ export const ProfileMenus = [
   {
     label: "My Account",
     icon: "user",
-    redirectTo: "/",
+    redirectTo: "/user-infor",
+  },
+  {
+    label: "Recharge",
+    icon: "dollar-sign",
+    redirectTo: "/payment-gateway",
   },
   {
     label: "Logout",
     icon: "log-out",
-    redirectTo: "/auth/logout",
+    redirectTo: "/auth/login",
   },
 ];
 

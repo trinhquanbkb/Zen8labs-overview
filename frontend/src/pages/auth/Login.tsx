@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
-import { Button, Row, Col, Alert } from "react-bootstrap";
+import React, { startTransition, useEffect } from "react";
 import AuthLayout from "../../layouts/AuthLayout/AuthLayout";
 import VerticalForm from "../../components/VerticalForm";
 import FormInput from "../../components/FormInput";
 import FeatherIcons from "feather-icons-react";
+import { Button, Row, Col, Alert } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { initLoginUser } from "../../redux/auth/reducers";
 import { AppDispatch, RootState } from "../../redux/store";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
 interface UserData {
@@ -25,13 +25,16 @@ export default function Login() {
     loading: state.Auth.login.loading,
     error: state.Auth.login.error,
   }));
-  console.log(error, user, loading);
 
   useEffect(() => {
     if (user && !loading && !error && cookies.user_infor) {
-      navigate("/chat");
+      startTransition(() => {
+        navigate("/chat");
+      });
     } else {
-      navigate("/auth/login");
+      startTransition(() => {
+        navigate("/auth/login");
+      });
     }
   }, [user, loading, error, navigate, cookies]);
 
@@ -87,6 +90,20 @@ export default function Login() {
           startIcon={<FeatherIcons icon={"lock"} className="icon-dual" />}
           placeholder={"Enter your Password"}
           containerClass={"mb-3"}
+          action={
+            <Link
+              to="/auth/forget-password"
+              className="float-end text-muted text-unline-dashed ms-1"
+              onClick={(event) => {
+                event.preventDefault();
+                startTransition(() => {
+                  navigate("/auth/forget-password");
+                });
+              }}
+            >
+              Forgot your password?
+            </Link>
+          }
         ></FormInput>
 
         <div className="mb-3 text-center d-grid">

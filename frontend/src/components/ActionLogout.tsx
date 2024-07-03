@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { startTransition, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
@@ -8,10 +8,10 @@ const ActionLogout = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!accessToken) {
-      navigate("/auth/login");
-    } else {
-      navigate("/chat");
+    if (!accessToken && window.location.href.includes("/auth/login")) {
+      startTransition(() => {
+        navigate("/auth/login");
+      });
     }
   }, [cookies, accessToken, navigate]);
 

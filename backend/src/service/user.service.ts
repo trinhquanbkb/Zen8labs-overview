@@ -80,9 +80,21 @@ const createUser = async (req: IUserRequest) => {
   }
 };
 
+const updateUser = async (body: IUserRequest, params: IUserRequest) => {
+  return await db.users.update(
+    { ...body },
+    {
+      where: {
+        ...params,
+      },
+    }
+  );
+};
+
 export const UserService = {
   getDetailUser,
   getListUser,
   createUser,
   createToken,
+  updateUser,
 };

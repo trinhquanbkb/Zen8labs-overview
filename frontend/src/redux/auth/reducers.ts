@@ -18,7 +18,9 @@ interface AuthStateType {
     error?: AxiosError;
   };
   tokenVerifyPassword: string;
+  passwordReset: any;
 }
+
 const AuthInitialStates: AuthStateType = {
   login: {
     loading: false,
@@ -33,6 +35,7 @@ const AuthInitialStates: AuthStateType = {
   userSignUp: undefined,
   loading: undefined,
   tokenVerifyPassword: "",
+  passwordReset: undefined,
 };
 
 const Auth = createSlice({
@@ -69,6 +72,16 @@ const Auth = createSlice({
     ) => {
       state.tokenVerifyPassword = action.payload.token;
     },
+    resetAuth: (state) => {
+      return {
+        ...state,
+        error: undefined,
+        userSignUp: undefined,
+        loading: undefined,
+        tokenVerifyPassword: "",
+        passwordReset: false,
+      };
+    },
   },
 });
 
@@ -78,6 +91,7 @@ export const {
   loginUserSuccess,
   loginUserFailed,
   verifyTokenForgotPassword,
+  resetAuth,
 } = Auth.actions;
 
 // Selectors
