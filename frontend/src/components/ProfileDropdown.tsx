@@ -1,5 +1,5 @@
 import React, { startTransition, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Dropdown } from "react-bootstrap";
 import classNames from "classnames";
 import FeatherIcon from "feather-icons-react";
@@ -60,8 +60,8 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
                   {i === props.menuItems.length - 1 && (
                     <div className="dropdown-divider"></div>
                   )}
-                  <Link
-                    to={item.redirectTo}
+                  <a
+                    href={item.redirectTo}
                     className="dropdown-item notify-item"
                     key={i + "-profile-menu"}
                     onClick={() => {
@@ -81,7 +81,7 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
                       className="icon-dual icon-xs me-1"
                     />
                     <span>{item.label}</span>
-                  </Link>
+                  </a>
                 </React.Fragment>
               );
             } else {
@@ -90,8 +90,8 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
                   {i === props.menuItems.length - 1 && (
                     <div className="dropdown-divider"></div>
                   )}
-                  <Link
-                    to={item.redirectTo}
+                  <a
+                    href={item.redirectTo}
                     className="dropdown-item notify-item"
                     key={i + "-profile-menu"}
                   >
@@ -100,7 +100,7 @@ const ProfileDropdown = (props: ProfileDropdownProps) => {
                       className="icon-dual icon-xs me-1"
                     />
                     <span>{item.label}</span>
-                  </Link>
+                  </a>
                 </React.Fragment>
               );
             }

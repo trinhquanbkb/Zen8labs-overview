@@ -10,6 +10,18 @@ export const authRouter = express.Router();
 
 authRouter.post("/login", AuthController.login);
 authRouter.post("/register", AuthController.register);
+authRouter.post("/refresh-token", AuthController.refreshToken);
+authRouter.post(
+  "/send-mail-forget-password",
+  AuthController.sendMailForgetPassword
+);
+authRouter.post(
+  "/check-code-forget-password",
+  AuthController.checkCodeForgetPassword
+);
+authRouter.post("/reset-password", AuthController.resetPassword);
+
+// oauth login
 authRouter.get(
   "/google",
   passport.authenticate("google", { scope: ["email", "profile"] })

@@ -56,6 +56,9 @@ module.exports = {
       google_auth: {
         type: Sequelize.STRING,
       },
+      code: {
+        type: Sequelize.STRING,
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
