@@ -209,6 +209,11 @@
 
     .box-chat_message {
       height: 492px;
+      visibility: visible;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      padding: 10px;
+      box-sizing: border-box;
     }
 
     .form-input-wrapper {

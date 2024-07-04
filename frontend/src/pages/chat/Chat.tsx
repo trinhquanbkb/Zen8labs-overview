@@ -7,22 +7,40 @@ import UserMessage from "./UserMessage";
 import { IUser } from "../../interfaces/users";
 import MessageBox from "./MessageBox";
 import TopMessageBox from "./TopMessageBox";
+import { useGetMessageInConversationQuery } from "../../api/messageApi";
+import Loading from "../../components/Loading";
+
+interface IMess {
+  message: string | null | undefined;
+  receiver_id: number | null | undefined;
+  sender_id: number | null | undefined;
+}
 
 export default function Chat() {
+  // ref
+  const chatContainerRef = useRef<any>();
+  const socketRef = useRef<Socket | null>();
+
+  // cookie
   const [cookies] = useCookies();
+
+  // state
+  const [scrollHeight, setScrollHeight] = useState<number>(0);
   const [userId, setUserId] = useState<number | null>();
-  const [mess, setMess] = useState<
-    {
-      message: string;
-      receiver_id: number | null | undefined;
-      sender_id: number | null | undefined;
-    }[]
-  >([]);
+  const [mess, setMess] = useState<IMess[]>([]);
   const [message, setMessage] = useState("");
   const [receiver, setReceiver] = useState<IUser>();
+  const [offset, setOffset] = useState<number>(0);
   const [id, setId] = useState("");
-  const socketRef = useRef<Socket | null>();
+
+  // fetch data
   const { data, isFetching } = useGetAllUsersQuery();
+  const { data: dataMessage, isFetching: fetchingMessage } =
+    useGetMessageInConversationQuery({
+      user_id_1: userId ?? 0,
+      user_id_2: receiver?.id ?? 0,
+      offset: offset,
+    });
 
   useEffect(() => {
     const serverSocket = process.env.REACT_APP_SERVER_SOCKET;
@@ -57,8 +75,44 @@ export default function Chat() {
   }, [data, userId]);
 
   useEffect(() => {
+    if (
+      !fetchingMessage &&
+      dataMessage &&
+      dataMessage.data.length > 0 &&
+      receiver
+    ) {
+      const messConvert: IMess[] = dataMessage.data.map((m) => {
+        return {
+          message: m.content,
+          receiver_id: receiver?.id,
+          sender_id: m.user_id,
+        };
+      });
+
+      setMess([...messConvert.reverse(), ...mess]);
+    }
+  }, [fetchingMessage, receiver]);
+
+  useEffect(() => {
+    if (chatContainerRef.current && mess.length > 0) {
+      const previousScrollHeight = chatContainerRef.current?.scrollHeight;
+      setScrollHeight(previousScrollHeight);
+      chatContainerRef.current.scrollTop =
+        scrollHeight === 0
+          ? previousScrollHeight
+          : previousScrollHeight - scrollHeight;
+    }
+  }, [mess]);
+
+  useEffect(() => {
     setUserId(cookies.user_infor ? cookies.user_infor.id : null);
   }, [cookies]);
+
+  const handleScroll = (event: any) => {
+    if (event.target.scrollTop === 0) {
+      setOffset(offset + 1);
+    }
+  };
 
   const sendMessage = () => {
     if (message) {
@@ -115,6 +169,10 @@ export default function Chat() {
                           name={u.first_name + " " + u.last_name}
                           onChooseUser={() => {
                             setReceiver(u);
+                            setMessage("");
+                            setMess([]);
+                            setOffset(0);
+                            setScrollHeight(0);
                           }}
                         />
                       </div>
@@ -129,7 +187,18 @@ export default function Chat() {
             <div className="chat-wrapper ms-0">
               <div className="chat-socket d-flex flex-column justify-content-between">
                 <TopMessageBox receiver={receiver} />
-                <div className="box-chat_message pt-2 d-flex flex-column justify-content-start">
+                <div
+                  className="box-chat_message pt-2 d-flex flex-column justify-content-start"
+                  onScroll={handleScroll}
+                  ref={chatContainerRef}
+                >
+                  {dataMessage &&
+                  dataMessage.data.length > 0 &&
+                  fetchingMessage ? (
+                    <Loading />
+                  ) : (
+                    <></>
+                  )}
                   {renderMess()}
                 </div>
                 <MessageBox

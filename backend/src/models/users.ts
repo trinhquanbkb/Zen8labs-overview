@@ -15,6 +15,11 @@ export class users extends Model {
   public blocked!: boolean;
   public facebook_auth!: string;
   public google_auth!: string;
+<<<<<<< Updated upstream
+=======
+  public code!: string;
+  public online!: boolean;
+>>>>>>> Stashed changes
   public created_at!: Date;
   public updated_at!: Date;
 
@@ -42,6 +47,11 @@ export default (sequelize: Sequelize) => {
       blocked: DataTypes.BOOLEAN,
       facebook_auth: DataTypes.STRING,
       google_auth: DataTypes.STRING,
+<<<<<<< Updated upstream
+=======
+      code: DataTypes.STRING,
+      online: DataTypes.BOOLEAN,
+>>>>>>> Stashed changes
       created_at: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,

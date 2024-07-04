@@ -6,7 +6,7 @@ import session from "express-session";
 import passport from "passport";
 import cookieParser from "cookie-parser";
 import { rootRouter } from "./routers";
-import { initSocket } from "./service/socket.service";
+import { SocketService } from "./service/socket.service";
 
 dotenv.config();
 const app = express();
@@ -36,7 +36,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use("/api/v1", rootRouter);
 
-const server = initSocket(app);
+const server = SocketService.initSocket(app);
 server.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });

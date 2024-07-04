@@ -4,7 +4,7 @@ import { createServer, Server as HTTPServer } from "node:http";
 import { conversationService } from "./conversation.service";
 import { messageService } from "./message.service";
 
-export const initSocket = (app: Express.Application): HTTPServer => {
+const initSocket = (app: Express.Application): HTTPServer => {
   const server = createServer(app);
   const io = new Server(server, {
     cors: {
@@ -16,7 +16,6 @@ export const initSocket = (app: Express.Application): HTTPServer => {
   io.on("connection", (socket: Socket) => {
     // join conversation
     socket.on("joinRoom", async (room) => {
-      console.log(room);
       socket.join(room);
     });
 
@@ -24,7 +23,8 @@ export const initSocket = (app: Express.Application): HTTPServer => {
       // check conversation
       const conversation =
         await conversationService.getDetailConversationWithUserId(
-          data.receiver_id
+          data.receiver_id,
+          data.sender_id
         );
       if (conversation) {
         // create new message
@@ -65,3 +65,5 @@ export const initSocket = (app: Express.Application): HTTPServer => {
 
   return server;
 };
+
+export const SocketService = { initSocket };

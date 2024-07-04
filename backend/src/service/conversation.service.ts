@@ -10,9 +10,17 @@ const getDetailConversation = async (req: IConversationRequest) => {
   });
 };
 
-const getDetailConversationWithUserId = async (req: number) => {
+const getDetailConversationWithUserId = async (
+  user_one: number,
+  user_two: number
+) => {
   return await db.conversations.findOne({
-    where: { [Op.or]: [{ user_one: req }, { user_two: req }] },
+    where: {
+      [Op.or]: [
+        { user_one: user_one, user_two: user_two },
+        { user_one: user_two, user_two: user_one },
+      ],
+    },
   });
 };
 

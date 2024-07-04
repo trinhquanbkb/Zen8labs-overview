@@ -10,6 +10,7 @@ export interface UsersModel {
   avatar?: string;
   role_id: number;
   deleted?: boolean;
+  online?: boolean;
   blocked?: boolean;
   facebook_auth?: string | null;
   google_auth?: string | null;
@@ -26,6 +27,7 @@ export interface IUserResponse {
   avatar?: string;
   created_at?: Date;
   updated_at?: Date;
+  online?: boolean;
   facebook_auth?: string | null;
   google_auth?: string | null;
   deleted?: boolean;
@@ -46,6 +48,11 @@ export interface IUserRequest {
   blocked?: boolean;
   created_at?: Date;
   updated_at?: Date;
+<<<<<<< Updated upstream
+=======
+  code?: string;
+  online?: boolean;
+>>>>>>> Stashed changes
   facebook_auth?: string | null;
   google_auth?: string | null;
 }
