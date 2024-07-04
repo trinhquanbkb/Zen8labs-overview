@@ -1,4 +1,4 @@
-export interface IMessageRequest {
+export interface IMessage {
   id?: number;
   content?: string;
   seen_at?: Date;

@@ -15583,8 +15583,8 @@ body[data-layout-mode=two-column][data-layout-width=boxed]:not([data-sidebar-siz
 }
 
 .avatar-sm {
-  height: 2.25rem;
-  width: 2.25rem;
+  height: 2.5rem;
+  width: 2.5rem;
 }
 
 .avatar {
@@ -16090,29 +16090,29 @@ body[data-layout-mode=two-column][data-layout-width=boxed]:not([data-sidebar-siz
 }
 
 /* Chat widget */
-.conversation-list {
+.convertation-list {
   list-style: none;
   height: 332px;
   padding: 0 7px;
   outline: none;
 }
-.conversation-list li {
+.convertation-list li {
   margin-bottom: 24px;
 }
-.conversation-list .chat-avatar {
+.convertation-list .chat-avatar {
   float: left;
   text-align: center;
   width: 38px;
 }
-.conversation-list .chat-avatar img {
+.convertation-list .chat-avatar img {
   border-radius: 100%;
   width: 100%;
 }
-.conversation-list .chat-avatar i {
+.convertation-list .chat-avatar i {
   font-size: 12px;
   font-style: normal;
 }
-.conversation-list .ctext-wrap {
+.convertation-list .ctext-wrap {
   background: #edb6b6;
   color: #CC3333;
   border-radius: 0.25rem;
@@ -16120,18 +16120,18 @@ body[data-layout-mode=two-column][data-layout-width=boxed]:not([data-sidebar-siz
   padding: 4px 12px;
   position: relative;
 }
-.conversation-list .ctext-wrap i {
+.convertation-list .ctext-wrap i {
   display: block;
   font-size: 12px;
   font-style: normal;
   font-weight: 700;
   position: relative;
 }
-.conversation-list .ctext-wrap p {
+.convertation-list .ctext-wrap p {
   margin: 0;
   padding-top: 3px;
 }
-.conversation-list .ctext-wrap:after {
+.convertation-list .ctext-wrap:after {
   right: 98%;
   top: 0;
   border: solid transparent;
@@ -16145,26 +16145,26 @@ body[data-layout-mode=two-column][data-layout-width=boxed]:not([data-sidebar-siz
   margin-left: -1px;
   border-right-color: #edb6b6;
 }
-.conversation-list .conversation-text {
+.convertation-list .convertation-text {
   float: left;
   font-size: 12px;
   margin-left: 12px;
   width: 70%;
 }
-.conversation-list .odd .chat-avatar {
+.convertation-list .odd .chat-avatar {
   float: right !important;
 }
-.conversation-list .odd .conversation-text {
+.convertation-list .odd .convertation-text {
   float: right !important;
   margin-right: 12px;
   text-align: right;
   width: 70% !important;
 }
-.conversation-list .odd .ctext-wrap {
+.convertation-list .odd .ctext-wrap {
   background-color: #e2e7f1;
   color: #4B4B5A;
 }
-.conversation-list .odd .ctext-wrap:after {
+.convertation-list .odd .ctext-wrap:after {
   border-color: transparent;
   border-left-color: #e2e7f1;
   border-top-color: #e2e7f1;
@@ -17486,21 +17486,21 @@ section.bg-body {
   right: 0;
 }
 
-.conversation-list {
+.convertation-list {
   list-style: none;
   padding: 0 15px;
   outline: none;
 }
-.conversation-list li {
+.convertation-list li {
   margin-bottom: 20px;
 }
-.conversation-list li .conversation-actions {
+.convertation-list li .convertation-actions {
   display: none;
 }
-.conversation-list li:hover .conversation-actions {
+.convertation-list li:hover .convertation-actions {
   display: block;
 }
-.conversation-list .ctext-wrap {
+.convertation-list .ctext-wrap {
   background: #f1f3fa;
   color: #6c757d;
   border-radius: 3px;
@@ -17508,18 +17508,18 @@ section.bg-body {
   padding: 7px 12px;
   position: relative;
 }
-.conversation-list .ctext-wrap i {
+.convertation-list .ctext-wrap i {
   display: block;
   font-size: 12px;
   font-style: normal;
   font-weight: bold;
   position: relative;
 }
-.conversation-list .ctext-wrap p {
+.convertation-list .ctext-wrap p {
   margin: 0;
   padding: 0;
 }
-.conversation-list .ctext-wrap:after {
+.convertation-list .ctext-wrap:after {
   left: -11px;
   top: 0;
   border: solid transparent;
@@ -17531,22 +17531,22 @@ section.bg-body {
   border-width: 6px;
   margin-right: -1px;
 }
-.conversation-list .conversation-text {
+.convertation-list .convertation-text {
   float: left;
   font-size: 13px;
   margin-left: 12px;
   width: 80%;
 }
-.conversation-list .odd .conversation-text {
+.convertation-list .odd .convertation-text {
   float: right !important;
   text-align: right !important;
   width: 70% !important;
 }
-.conversation-list .odd .ctext-wrap {
+.convertation-list .odd .ctext-wrap {
   background-color: #fef5e4;
   color: #4B4B5A;
 }
-.conversation-list .odd .ctext-wrap:after {
+.convertation-list .odd .ctext-wrap:after {
   border-color: transparent;
   right: -10px;
   left: auto;

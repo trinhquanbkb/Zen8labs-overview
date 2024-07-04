@@ -17,6 +17,11 @@ export class roles extends Model {
 export default (sequelize: Sequelize) => {
   roles.init(
     {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       role: DataTypes.STRING,
       created_at: {
         type: DataTypes.DATE,

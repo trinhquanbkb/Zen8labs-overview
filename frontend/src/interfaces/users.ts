@@ -1,5 +1,5 @@
 export interface IUser {
-  id?: number;
+  id: number;
   first_name?: string;
   last_name?: string;
   nick_name?: string;
@@ -14,6 +14,8 @@ export interface IUser {
   facebook_auth?: string | null;
   google_auth?: string | null;
   converstations_id: number[];
+  code?: string;
+  socket?: string;
 }
 
 export interface UserInforCookie {

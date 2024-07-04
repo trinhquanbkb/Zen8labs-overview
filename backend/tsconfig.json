@@ -11,6 +11,6 @@
     "typeRoots": ["./node_modules/@types", "./src/types"],
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*.ts", "src/migrations/20240624042109-create-roles.js", "src/migrations/20240624042631-create-users.js"],
+  "include": ["src/**/*.ts", "src/migrations/20240624042109-create-roles.js", "src/migrations/20240624042631-create-users.js", "src/seeders/users.ts"],
   "exclude": ["node_modules"]
 }

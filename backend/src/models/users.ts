@@ -13,9 +13,10 @@ export class users extends Model {
   public role_id!: number;
   public deleted!: boolean;
   public blocked!: boolean;
+  public socket!: string;
+  public code!: string;
   public facebook_auth!: string;
   public google_auth!: string;
-  public code!: string;
   public created_at!: Date;
   public updated_at!: Date;
 
@@ -30,6 +31,11 @@ export class users extends Model {
 export default (sequelize: Sequelize) => {
   users.init(
     {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       first_name: DataTypes.STRING,
       last_name: DataTypes.STRING,
       nick_name: DataTypes.STRING,
@@ -38,12 +44,13 @@ export default (sequelize: Sequelize) => {
       address: DataTypes.STRING,
       password: DataTypes.STRING,
       avatar: DataTypes.STRING,
+      code: DataTypes.STRING,
       role_id: DataTypes.INTEGER,
       deleted: DataTypes.BOOLEAN,
       blocked: DataTypes.BOOLEAN,
+      socket: DataTypes.STRING,
       facebook_auth: DataTypes.STRING,
       google_auth: DataTypes.STRING,
-      code: DataTypes.STRING,
       created_at: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,

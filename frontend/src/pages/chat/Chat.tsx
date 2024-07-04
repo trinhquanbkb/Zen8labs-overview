@@ -7,22 +7,42 @@ import UserMessage from "./UserMessage";
 import { IUser } from "../../interfaces/users";
 import MessageBox from "./MessageBox";
 import TopMessageBox from "./TopMessageBox";
+import { useGetMessageInConvertationQuery } from "../../api/messageApi";
+import Loading from "../../components/Loading";
+import UserHold from "./UserHold";
+
+interface IMess {
+  message: string | null | undefined;
+  receiver_id: number | null | undefined;
+  sender_id: number | null | undefined;
+}
 
 export default function Chat() {
+  // ref
+  const chatContainerRef = useRef<any>();
+  const socketRef = useRef<Socket | null>();
+
+  // cookie
   const [cookies] = useCookies();
+
+  // state
+  const [scrollHeight, setScrollHeight] = useState<number>(0);
   const [userId, setUserId] = useState<number | null>();
-  const [mess, setMess] = useState<
-    {
-      message: string;
-      receiver_id: number | null | undefined;
-      sender_id: number | null | undefined;
-    }[]
-  >([]);
+  const [mess, setMess] = useState<IMess[]>([]);
   const [message, setMessage] = useState("");
   const [receiver, setReceiver] = useState<IUser>();
-  const [id, setId] = useState("");
-  const socketRef = useRef<Socket | null>();
+  const [offset, setOffset] = useState<number>(0);
+  const [statusSend, setStatusSend] = useState<boolean>(false);
+  const [listUserOnline, setListUserOnline] = useState<number[]>([]);
+
+  // fetch data
   const { data, isFetching } = useGetAllUsersQuery();
+  const { data: dataMessage, isFetching: fetchingMessage } =
+    useGetMessageInConvertationQuery({
+      user_id_1: userId ?? 0,
+      user_id_2: receiver?.id ?? 0,
+      offset: offset,
+    });
 
   useEffect(() => {
     const serverSocket = process.env.REACT_APP_SERVER_SOCKET;
@@ -31,10 +51,13 @@ export default function Chat() {
     } else {
       socketRef.current = io(serverSocket);
       socketRef.current.on("connect", () => {
-        setId(String(socketRef.current!.id));
+        // setId(String(socketRef.current!.id));
       });
       socketRef.current.on("sendDataServer", (dataGot) => {
         setMess((oldMsgs) => [...oldMsgs, dataGot]);
+      });
+      socketRef.current.on("sendOnlineAccount", (userId) => {
+        setListUserOnline([...userId]);
       });
 
       return () => {
@@ -47,8 +70,8 @@ export default function Chat() {
 
   useEffect(() => {
     if (data && userId && socketRef.current) {
-      const conversations = data.find((d) => d.id === userId);
-      conversations?.converstations_id.forEach((conver: number) => {
+      const convertations = data.find((d) => d.id === userId);
+      convertations?.converstations_id.forEach((conver: number) => {
         if (socketRef.current) {
           socketRef.current.emit("joinRoom", conver);
         }
@@ -57,8 +80,48 @@ export default function Chat() {
   }, [data, userId]);
 
   useEffect(() => {
-    setUserId(cookies.user_infor ? cookies.user_infor.id : null);
+    if (
+      !fetchingMessage &&
+      dataMessage &&
+      dataMessage.data.length > 0 &&
+      receiver
+    ) {
+      const messConvert: IMess[] = dataMessage.data.map((m) => {
+        return {
+          message: m.content,
+          receiver_id: receiver?.id,
+          sender_id: m.user_id,
+        };
+      });
+
+      setMess([...messConvert.reverse(), ...mess]);
+    }
+  }, [fetchingMessage, receiver]);
+
+  useEffect(() => {
+    if (chatContainerRef.current && mess.length > 0 && !statusSend) {
+      const previousScrollHeight = chatContainerRef.current?.scrollHeight;
+      setScrollHeight(previousScrollHeight);
+      chatContainerRef.current.scrollTop =
+        scrollHeight === 0
+          ? previousScrollHeight
+          : previousScrollHeight - scrollHeight;
+      setStatusSend(false);
+    }
+  }, [mess, statusSend]);
+
+  useEffect(() => {
+    if (cookies.user_infor && socketRef.current) {
+      setUserId(cookies.user_infor ? cookies.user_infor.id : null);
+      socketRef.current.emit("userOnline", cookies.user_infor.id);
+    }
   }, [cookies]);
+
+  const handleScroll = (event: any) => {
+    if (event.target.scrollTop === 0) {
+      setOffset(offset + 1);
+    }
+  };
 
   const sendMessage = () => {
     if (message) {
@@ -76,7 +139,7 @@ export default function Chat() {
 
   const renderMess = () => {
     return mess.map((m, index) => {
-      if (m.receiver_id !== userId) {
+      if (m.sender_id !== userId) {
         return (
           <div className="d-flex justify-content-start">
             <div key={index} className={`other-people chat-item break-word`}>
@@ -99,8 +162,15 @@ export default function Chat() {
   return (
     <>
       <Row>
-        <Col xs={12} md={4}>
-          <div className="chat-user-box me-0">
+        <Col xs={12} md={3}>
+          <div className="chat-user-box me-0 px-3 pt-3">
+            <UserHold
+              name={
+                cookies.user_infor.first_name +
+                " " +
+                cookies.user_infor.last_name
+              }
+            />
             {isFetching && !userId
               ? null
               : data
@@ -113,8 +183,13 @@ export default function Chat() {
                           chat={null}
                           avatar={null}
                           name={u.first_name + " " + u.last_name}
+                          online={listUserOnline.includes(u.id)}
                           onChooseUser={() => {
                             setReceiver(u);
+                            setMessage("");
+                            setMess([]);
+                            setOffset(0);
+                            setScrollHeight(0);
                           }}
                         />
                       </div>
@@ -125,11 +200,25 @@ export default function Chat() {
         </Col>
 
         {receiver ? (
-          <Col xs={12} md={8}>
+          <Col xs={12} md={9}>
             <div className="chat-wrapper ms-0">
               <div className="chat-socket d-flex flex-column justify-content-between">
-                <TopMessageBox receiver={receiver} />
-                <div className="box-chat_message pt-2 d-flex flex-column justify-content-start">
+                <TopMessageBox
+                  online={listUserOnline.includes(receiver.id)}
+                  receiver={receiver}
+                />
+                <div
+                  className="box-chat_message pt-2 d-flex flex-column justify-content-start"
+                  onScroll={handleScroll}
+                  ref={chatContainerRef}
+                >
+                  {dataMessage &&
+                  dataMessage.data.length > 0 &&
+                  fetchingMessage ? (
+                    <Loading />
+                  ) : (
+                    <></>
+                  )}
                   {renderMess()}
                 </div>
                 <MessageBox
@@ -148,6 +237,7 @@ export default function Chat() {
                         sender_id: userId,
                       },
                     ]);
+                    setStatusSend(true);
                   }}
                 />
               </div>

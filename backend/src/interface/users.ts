@@ -10,6 +10,7 @@ export interface UsersModel {
   avatar?: string;
   role_id: number;
   deleted?: boolean;
+  socket?: string;
   blocked?: boolean;
   code?: string;
   facebook_auth?: string | null;
@@ -27,6 +28,7 @@ export interface IUserResponse {
   avatar?: string;
   created_at?: Date;
   updated_at?: Date;
+  socket?: string;
   facebook_auth?: string | null;
   google_auth?: string | null;
   code?: string;
@@ -49,6 +51,7 @@ export interface IUserRequest {
   created_at?: Date;
   updated_at?: Date;
   code?: string;
+  socket?: string;
   facebook_auth?: string | null;
   google_auth?: string | null;
 }

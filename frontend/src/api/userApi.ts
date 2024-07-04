@@ -11,6 +11,9 @@ const categoriesApi = api.injectEndpoints({
         url: "/users",
         method: "GET",
       }),
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
+      },
     }),
   }),
 });

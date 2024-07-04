@@ -25,10 +25,10 @@ module.exports = {
           key: "id",
         },
       },
-      conversation_id: {
+      convertation_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: "conversations",
+          model: "convertations",
           key: "id",
         },
       },

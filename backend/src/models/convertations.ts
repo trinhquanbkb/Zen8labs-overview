@@ -1,7 +1,7 @@
 "use strict";
 import { Model, DataTypes, Sequelize } from "sequelize";
 
-export class conversations extends Model {
+export class convertations extends Model {
   public id!: number;
   public user_one!: number;
   public user_two!: number;
@@ -11,13 +11,18 @@ export class conversations extends Model {
 
   public static associate(models: any) {
     this.hasMany(models.messages, {
-      foreignKey: "conversation_id",
+      foreignKey: "convertation_id",
     });
   }
 }
 export default (sequelize: Sequelize) => {
-  conversations.init(
+  convertations.init(
     {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       user_one: DataTypes.NUMBER,
       user_two: DataTypes.NUMBER,
       status: DataTypes.NUMBER,
@@ -32,10 +37,10 @@ export default (sequelize: Sequelize) => {
     },
     {
       sequelize,
-      modelName: "conversations",
+      modelName: "convertations",
       underscored: true,
     }
   );
 
-  return conversations;
+  return convertations;
 };

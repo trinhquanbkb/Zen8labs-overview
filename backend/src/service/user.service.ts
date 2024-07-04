@@ -54,7 +54,7 @@ const getListUser = async (req: IUserRequest) => {
 
   return await Promise.all(
     users.map(async (item: any) => {
-      const converstations_id = await db.conversations.findAll({
+      const converstations_id = await db.convertations.findAll({
         where: {
           [Op.or]: [
             { user_one: item.dataValues.id },
@@ -68,6 +68,25 @@ const getListUser = async (req: IUserRequest) => {
       };
     })
   );
+};
+
+const getListUserOnline = async () => {
+  const users = await db.users.findAll({
+    where: {
+      socket: {
+        [Op.or]: [
+          {
+            [Op.notLike]: null,
+          },
+          {
+            [Op.notLike]: "",
+          },
+        ],
+      },
+    },
+    attributes: ["id"],
+  });
+  return users.map((i: { id: number }) => i.id);
 };
 
 const createUser = async (req: IUserRequest) => {
@@ -94,6 +113,7 @@ const updateUser = async (body: IUserRequest, params: IUserRequest) => {
 export const UserService = {
   getDetailUser,
   getListUser,
+  getListUserOnline,
   createUser,
   createToken,
   updateUser,

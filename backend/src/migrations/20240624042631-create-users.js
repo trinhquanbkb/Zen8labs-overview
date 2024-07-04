@@ -50,6 +50,9 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
       },
+      socket: {
+        type: Sequelize.STRING,
+      },
       facebook_auth: {
         type: Sequelize.STRING,
       },

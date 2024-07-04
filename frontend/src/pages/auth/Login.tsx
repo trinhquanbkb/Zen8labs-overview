@@ -119,7 +119,7 @@ export default function Login() {
           <div
             className="btn btn-white mb-2 mb-sm-0 me-1"
             onClick={async () => {
-              window.open("http://localhost:3002/api/v1/auth/google", "_self");
+              window.open(`${process.env.REACT_APP_SERVER_HOST}/auth/google`, "_self");
             }}
           >
             <i className="uil uil-google icon-google me-2"></i>

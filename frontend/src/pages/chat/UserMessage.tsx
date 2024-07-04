@@ -1,12 +1,14 @@
 import React from "react";
 import { Col, Row } from "react-bootstrap";
 import logoImg from "../../assets/images/logo_chat.png";
+import classNames from "classnames";
 
 export interface IUserMessage {
   avatar?: string | null;
   name: string;
   chat?: string | null;
   onChooseUser: any;
+  online: boolean;
 }
 
 export default function UserMessage({
@@ -14,6 +16,7 @@ export default function UserMessage({
   name,
   chat,
   onChooseUser,
+  online,
 }: IUserMessage) {
   return (
     <>
@@ -25,6 +28,12 @@ export default function UserMessage({
       >
         <Col xs={2} className="d-flex justify-content-center">
           {" "}
+          <span
+            className={classNames("user-status", {
+              "bg-success": online === true,
+              "bg-secondary": online === false,
+            })}
+          ></span>
           <img
             src={avatar ? avatar : logoImg}
             alt="logo"

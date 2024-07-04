@@ -13,6 +13,11 @@ export class permissions extends Model {
 export default (sequelize: Sequelize) => {
   permissions.init(
     {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       action: DataTypes.STRING,
       description: DataTypes.STRING,
       created_at: {

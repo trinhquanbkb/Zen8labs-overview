@@ -23,6 +23,11 @@ export class transactions extends Model {
 export default (sequelize: Sequelize) => {
   transactions.init(
     {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       transaction_type: DataTypes.INTEGER,
       customer_note: DataTypes.STRING,
       transaction_money: DataTypes.INTEGER,
