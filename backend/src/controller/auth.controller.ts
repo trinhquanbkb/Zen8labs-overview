@@ -5,6 +5,7 @@ import { generateRandomString } from "../utils/functions/generateCode";
 import schedule from "node-schedule";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
+import jwt from "jsonwebtoken";
 
 dotenv.config();
 
@@ -66,7 +67,13 @@ const register = async (req: Request, res: Response) => {
   }
 };
 
-const refreshToken = async () => {};
+const refreshToken = async (req: Request, res: Response) => {
+  const refresh_token = req.body.refresh_token;
+  const decode = jwt.verify(
+    refresh_token,
+    process.env.HASH_REFRESH_TOKEN as string
+  );
+};
 
 const sendMailForgetPassword = async (req: Request, res: Response) => {
   try {

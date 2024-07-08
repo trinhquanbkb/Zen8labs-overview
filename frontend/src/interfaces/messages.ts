@@ -5,6 +5,6 @@ export interface IMessage {
   status?: number;
   user_id?: number;
   convertation_id?: number;
-  created_at?: Date;
-  updated_at?: Date;
+  created_at: Date;
+  updated_at: Date;
 }

@@ -4,7 +4,6 @@ import { createServer, Server as HTTPServer } from "node:http";
 import { convertationService } from "./convertation.service";
 import { messageService } from "./message.service";
 import { UserService } from "./user.service";
-import { Op } from "sequelize";
 
 const initSocket = (app: Express.Application): HTTPServer => {
   const server = createServer(app);
@@ -37,7 +36,7 @@ const initSocket = (app: Express.Application): HTTPServer => {
         );
       if (convertation) {
         // create new message
-        await messageService.createMessage({
+        const newMess = await messageService.createMessage({
           content: data.message,
           user_id: data.sender_id,
           convertation_id: convertation.dataValues.id,
@@ -46,6 +45,8 @@ const initSocket = (app: Express.Application): HTTPServer => {
         socket.to(convertation.dataValues.id).emit("sendDataServer", {
           receiver_id: data.receiver_id,
           message: data.message,
+          created_at: newMess.created_at,
+          updated_at: newMess.updated_at,
         });
       } else {
         // create new convertation
@@ -54,7 +55,7 @@ const initSocket = (app: Express.Application): HTTPServer => {
           user_two: data.receiver_id,
         });
         // create new message
-        await messageService.createMessage({
+        const newMess = await messageService.createMessage({
           content: data.message,
           user_id: data.sender_id,
           convertation_id: newConvertation.dataValues.id,
@@ -63,6 +64,8 @@ const initSocket = (app: Express.Application): HTTPServer => {
         socket.to(newConvertation.dataValues.id).emit("sendDataServer", {
           receiver_id: data.receiver_id,
           message: data.message,
+          created_at: newMess.created_at,
+          updated_at: newMess.updated_at,
         });
       }
     });
@@ -70,7 +73,7 @@ const initSocket = (app: Express.Application): HTTPServer => {
     socket.on("disconnect", async () => {
       await UserService.updateUser({ socket: "" }, { socket: socket.id });
       const users = await UserService.getListUserOnline();
-      socket.emit("sendOnlineAccount", users);
+      io.emit("sendOfflineAccount", users);
     });
   });
 

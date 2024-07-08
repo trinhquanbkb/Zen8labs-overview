@@ -3,18 +3,21 @@ import { io, Socket } from "socket.io-client";
 import { useCookies } from "react-cookie";
 import { Col, Row } from "react-bootstrap";
 import { useGetAllUsersQuery } from "../../api/userApi";
-import UserMessage from "./UserMessage";
+import { useGetMessageInConvertationQuery } from "../../api/messageApi";
 import { IUser } from "../../interfaces/users";
 import MessageBox from "./MessageBox";
 import TopMessageBox from "./TopMessageBox";
-import { useGetMessageInConvertationQuery } from "../../api/messageApi";
 import Loading from "../../components/Loading";
 import UserHold from "./UserHold";
+import Mess from "./Mess";
+import UserMessage from "./UserMessage";
 
-interface IMess {
+export interface IMess {
   message: string | null | undefined;
   receiver_id: number | null | undefined;
   sender_id: number | null | undefined;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export default function Chat() {
@@ -59,6 +62,9 @@ export default function Chat() {
       socketRef.current.on("sendOnlineAccount", (userId) => {
         setListUserOnline([...userId]);
       });
+      socketRef.current.on("sendOfflineAccount", (userId) => {
+        setListUserOnline([...userId]);
+      });
 
       return () => {
         if (socketRef.current) {
@@ -91,6 +97,8 @@ export default function Chat() {
           message: m.content,
           receiver_id: receiver?.id,
           sender_id: m.user_id,
+          created_at: m.created_at,
+          updated_at: m.updated_at,
         };
       });
 
@@ -140,21 +148,9 @@ export default function Chat() {
   const renderMess = () => {
     return mess.map((m, index) => {
       if (m.sender_id !== userId) {
-        return (
-          <div className="d-flex justify-content-start">
-            <div key={index} className={`other-people chat-item break-word`}>
-              {m.message}
-            </div>
-          </div>
-        );
+        return <Mess sender={m} index={index} mess={mess} userId={userId} />;
       } else {
-        return (
-          <div className="d-flex justify-content-end">
-            <div key={index} className={`your-message chat-item break-word`}>
-              {m.message}
-            </div>
-          </div>
-        );
+        return <Mess sender={m} index={index} mess={mess} userId={userId} />;
       }
     });
   };
@@ -162,13 +158,15 @@ export default function Chat() {
   return (
     <>
       <Row>
-        <Col xs={12} md={3}>
+        <Col xs={3} md={3}>
           <div className="chat-user-box me-0 px-3 pt-3">
             <UserHold
               name={
-                cookies.user_infor.first_name +
-                " " +
-                cookies.user_infor.last_name
+                cookies.user_infor
+                  ? cookies.user_infor.first_name +
+                    " " +
+                    cookies.user_infor.last_name
+                  : ""
               }
             />
             {isFetching && !userId
@@ -200,7 +198,7 @@ export default function Chat() {
         </Col>
 
         {receiver ? (
-          <Col xs={12} md={9}>
+          <Col xs={9} md={9}>
             <div className="chat-wrapper ms-0">
               <div className="chat-socket d-flex flex-column justify-content-between">
                 <TopMessageBox
@@ -235,6 +233,8 @@ export default function Chat() {
                         receiver_id: receiver ? receiver?.id : null,
                         message: value,
                         sender_id: userId,
+                        created_at: new Date(),
+                        updated_at: new Date(),
                       },
                     ]);
                     setStatusSend(true);
