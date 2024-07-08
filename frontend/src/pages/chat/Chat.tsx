@@ -16,8 +16,8 @@ export interface IMess {
   message: string | null | undefined;
   receiver_id: number | null | undefined;
   sender_id: number | null | undefined;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
 }
 
 export default function Chat() {
@@ -97,8 +97,8 @@ export default function Chat() {
           message: m.content,
           receiver_id: receiver?.id,
           sender_id: m.user_id,
-          created_at: m.created_at,
-          updated_at: m.updated_at,
+          created_at: m.created_at.toString(),
+          updated_at: m.updated_at.toString(),
         };
       });
 
@@ -225,6 +225,7 @@ export default function Chat() {
                     setMessage(value);
                   }}
                   onSubmitMessage={(value: string) => {
+                    const now = new Date();
                     sendMessage();
                     setMessage("");
                     setMess([
@@ -233,8 +234,8 @@ export default function Chat() {
                         receiver_id: receiver ? receiver?.id : null,
                         message: value,
                         sender_id: userId,
-                        created_at: new Date(),
-                        updated_at: new Date(),
+                        created_at: now.toISOString(),
+                        updated_at: now.toISOString(),
                       },
                     ]);
                     setStatusSend(true);

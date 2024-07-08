@@ -45,6 +45,16 @@ export default function Mess({ sender, userId, index, mess }: IMessUser) {
                 {getTimeChat(sender.updated_at)}
               </div>
             ) : null
+          ) : index + 1 === mess.length ? (
+            <div
+              className={`time-mess d-flex ${
+                sender.sender_id !== userId
+                  ? "justify-content-end"
+                  : "justify-content-start"
+              }`}
+            >
+              {getTimeChat(sender.updated_at)}
+            </div>
           ) : null}
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { BaseQueryFn } from "@reduxjs/toolkit/dist/query/baseQueryTypes";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
-import { getAccessToken } from "../utils/getAccessToken";
+import { getAccessToken } from "../utils/getToken";
 
 export interface List<D> {
   data: {

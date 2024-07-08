@@ -7,7 +7,7 @@ import { Op } from "sequelize";
 
 dotenv.config();
 
-interface DataStoredInToken {
+export interface DataStoredInToken {
   id?: number;
   first_name?: string;
   last_name?: string;
@@ -27,7 +27,7 @@ const createToken = (user: UsersModel) => {
     avatar: user.avatar,
   };
 
-  const expiresIn = 60 * 15;
+  const expiresIn = 60 * 10;
   const access_token = jwt.sign(dataStoredInToken, HASH_ACCESS_TOKEN, {
     expiresIn,
   });

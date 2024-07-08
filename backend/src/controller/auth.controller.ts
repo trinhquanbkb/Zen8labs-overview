@@ -68,11 +68,35 @@ const register = async (req: Request, res: Response) => {
 };
 
 const refreshToken = async (req: Request, res: Response) => {
-  const refresh_token = req.body.refresh_token;
-  const decode = jwt.verify(
-    refresh_token,
-    process.env.HASH_REFRESH_TOKEN as string
-  );
+  try {
+    const refresh_token = req.body.refresh_token;
+    const decode: any = jwt.verify(
+      refresh_token,
+      process.env.HASH_REFRESH_TOKEN as string
+    );
+    if (decode) {
+      const results = await UserService.getDetailUser({
+        id: decode.id,
+        blocked: false,
+        deleted: false,
+        google_auth: null,
+        facebook_auth: null,
+      });
+      const token = UserService.createToken(results.dataValues);
+      res.status(200).send({
+        message: "Refresh token success",
+        token: {
+          expiresIn: token.expiresIn,
+          access_token: token.access_token,
+          refresh_token: token.refresh_token,
+        },
+      });
+    } else {
+      res.status(404).send("Refresh token expired!");
+    }
+  } catch (err) {
+    res.status(500).send(`${err}`);
+  }
 };
 
 const sendMailForgetPassword = async (req: Request, res: Response) => {

@@ -6,18 +6,21 @@ export const truncateString = (str: string, maxLength: number) => {
   }
 };
 
-export const getTimeChat = (isoTimeStr: Date) => {
-  let timePart = isoTimeStr.toString().split("T")[1].split("Z")[0];
-  let [hour, minute] = timePart.split(":");
-  let hourInt = parseInt(hour);
-  let period = hourInt >= 12 ? "pm" : "am";
-  hourInt = hourInt % 12 || 12;
+export const getTimeChat = (isoTimeStr: string) => {
+  let date = new Date(isoTimeStr);
+  let ictOffset = 7 * 60;
+  let utcOffset = date.getTimezoneOffset();
+  let ictTime = new Date(date.getTime() + (ictOffset + utcOffset) * 60 * 1000);
+  let hours = ictTime.getHours();
+  let minutes = ictTime.getMinutes();
 
-  let formattedTime = `${hourInt}:${minute} ${period}`;
-  return formattedTime;
+  let formattedHours = hours < 10 ? "0" + hours : hours;
+  let formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
+
+  return `${formattedHours}:${formattedMinutes}`;
 };
 
-export const isDifferentDay = (isoTimeStr1: Date, isoTimeStr2: Date) => {
+export const isDifferentDay = (isoTimeStr1: string, isoTimeStr2: string) => {
   let date1 = new Date(isoTimeStr1);
   let date2 = new Date(isoTimeStr2);
   let day1 = date1.getUTCDate();
@@ -30,7 +33,7 @@ export const isDifferentDay = (isoTimeStr1: Date, isoTimeStr2: Date) => {
   return day1 !== day2 || month1 !== month2 || year1 !== year2;
 };
 
-export const convertISOToDDMMYY = (isoTimeStr: Date) => {
+export const convertISOToDDMMYY = (isoTimeStr: string) => {
   let date = new Date(isoTimeStr);
   let day = date.getUTCDate();
   let month = date.getUTCMonth() + 1;
@@ -40,4 +43,28 @@ export const convertISOToDDMMYY = (isoTimeStr: Date) => {
   let monthConvert = month < 10 ? "0" + month.toString() : month.toString();
 
   return `${dayConvert}-${monthConvert}-${year}`;
+};
+
+export const convertTimeToICT = (isoTimeStr: string) => {
+  let date = new Date(isoTimeStr);
+  let ictOffset = 7 * 60;
+  let utcOffset = date.getTimezoneOffset();
+  let ictTime = new Date(date.getTime() + (ictOffset + utcOffset) * 60 * 1000);
+
+  let day = ictTime.getUTCDate();
+  let month = ictTime.getUTCMonth() + 1;
+  let year = ictTime.getUTCFullYear();
+  let hours = ictTime.getUTCHours();
+  let minutes = ictTime.getUTCMinutes();
+  let seconds = ictTime.getUTCSeconds();
+
+  let dayC = day < 10 ? "0" + day : day;
+  let monthC = month < 10 ? "0" + month : month;
+  let hoursC = hours < 10 ? "0" + hours : hours;
+  let minutesC = minutes < 10 ? "0" + minutes : minutes;
+  let secondsC = seconds < 10 ? "0" + seconds : seconds;
+
+  let formattedTime = `${dayC}-${monthC}-${year} ${hoursC}:${minutesC}:${secondsC} ICT`;
+
+  return formattedTime;
 };

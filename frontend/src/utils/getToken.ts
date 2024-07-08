@@ -8,3 +8,9 @@ export const getAccessToken = () => {
     const accessToken = cookies.get("access_token");
     return accessToken ?  accessToken : null;
 };
+
+export const getRefreshToken = () => {
+    const cookies = new Cookies();
+    const refreshToken = cookies.get("refresh_token");
+    return refreshToken ?  refreshToken : null;
+}

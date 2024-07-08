@@ -1,6 +1,6 @@
 // @flow
 import { Cookies } from "react-cookie";
-import { getAccessToken } from "./getAccessToken";
+import { getAccessToken } from "./getToken";
 
 export const isUserAuthenticated = () => {
 	const access_token = getAccessToken();

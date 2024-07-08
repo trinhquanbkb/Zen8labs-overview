@@ -24,6 +24,6 @@ export const authenticate = async (
       res.status(404).send("You are not loggin");
     }
   } catch (error) {
-    res.status(500).send(error);
+    res.status(401).send(error);
   }
 };
