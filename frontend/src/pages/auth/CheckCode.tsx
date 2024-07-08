@@ -11,9 +11,7 @@ export default function CheckCode() {
   const checkCode = async () => {
     const res = await apiCheckCode({ code: code as string });
     if (res.data === "Verify code success!") {
-      startTransition(() => {
-        navigate(`/auth/reset-password/${code}`);
-      });
+      navigate(`/auth/reset-password/${code}`);
     } else {
       startTransition(() => {
         navigate("/auth/forget-password");

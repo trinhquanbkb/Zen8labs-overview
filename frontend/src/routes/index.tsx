@@ -9,6 +9,7 @@ const Login = React.lazy(() => import("../pages/auth/Login"));
 const Forgetpassword = React.lazy(() => import("../pages/auth/ForgetPassword"));
 const CheckCode = React.lazy(() => import("../pages/auth/CheckCode"));
 const ResetPassword = React.lazy(() => import("../pages/auth/ResetPassword"));
+const Register = React.lazy(() => import("../pages/auth/Register"));
 
 //error
 const Error404 = React.lazy(() => import("../pages/error/Error404"));
@@ -71,6 +72,12 @@ const authRoutes: RoutesProps[] = [
     path: "/auth/reset-password/:code",
     name: "Reset password",
     component: ResetPassword,
+    route: Route,
+  },
+  {
+    path: "/auth/register",
+    name: "Register",
+    component: Register,
     route: Route,
   },
 ];

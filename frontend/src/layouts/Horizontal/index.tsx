@@ -7,21 +7,22 @@ interface HorizontalLayoutProps {
 
 const Topbar = React.lazy(() => import("../Topbar"));
 const Footer = React.lazy(() => import("../Footer"));
+const loading = () => <div className="text-center"></div>;
 
 const HorizontalLayout = ({ children }: HorizontalLayoutProps) => {
   return (
     <>
       <div id="wrapper">
-        <Suspense>
+        <Suspense fallback={loading()}>
           <Topbar topbarDark={false} />
         </Suspense>
 
         <div className="content-page">
           <Container fluid className="content">
-            <Suspense>{children}</Suspense>
+            <Suspense fallback={loading()}>{children}</Suspense>
           </Container>
 
-          <Suspense>
+          <Suspense fallback={loading()}>
             <Footer />
           </Suspense>
         </div>

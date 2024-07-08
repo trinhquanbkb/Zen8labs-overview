@@ -46,6 +46,16 @@ const authApi = api.injectEndpoints({
         data,
       }),
     }),
+    register: build.mutation<
+      any,
+      { email: string; password: string; first_name: string; last_name: string }
+    >({
+      query: (data) => ({
+        url: "/auth/register",
+        method: "POST",
+        data,
+      }),
+    }),
   }),
 });
 
@@ -53,4 +63,5 @@ export const {
   useSendMailForgetPasswordMutation,
   useCheckCodeForgetPasswordMutation,
   useResetPasswordMutation,
+  useRegisterMutation,
 } = authApi;
