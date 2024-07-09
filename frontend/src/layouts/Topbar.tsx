@@ -40,7 +40,9 @@ const Topbar = ({ topbarDark }: TopbarProps) => {
         >
           <ul className="list-unstyled topnav-menu topnav-menu-left float-start m-0 ps-4">
             <li>
-              <img src={logoImg} alt="logo" style={{ height: "68px" }} />
+              <Link to="/chat">
+                <img src={logoImg} alt="logo" style={{ height: "68px" }} />
+              </Link>
             </li>
             <li>
               <Link

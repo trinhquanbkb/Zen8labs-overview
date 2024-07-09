@@ -5,6 +5,7 @@ export interface IMessageRequest {
   status?: number;
   user_id?: number;
   convertation_id?: number;
+  group_id?: number;
   created_at?: Date;
   updated_at?: Date;
 }

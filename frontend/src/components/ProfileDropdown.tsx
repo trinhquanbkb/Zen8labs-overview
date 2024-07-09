@@ -1,9 +1,9 @@
 import React, { startTransition, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Dropdown } from "react-bootstrap";
+import { Cookies } from "react-cookie";
 import classNames from "classnames";
 import FeatherIcon from "feather-icons-react";
-import { Cookies } from "react-cookie";
 
 interface ProfileMenuItem {
   label: string;

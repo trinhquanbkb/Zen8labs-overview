@@ -26,9 +26,18 @@ module.exports = {
         },
       },
       convertation_id: {
+        allowNull: true,
         type: Sequelize.INTEGER,
         references: {
           model: "convertations",
+          key: "id",
+        },
+      },
+      group_id: {
+        allowNull: true,
+        type: Sequelize.INTEGER,
+        references: {
+          model: "groups",
           key: "id",
         },
       },

@@ -24,6 +24,10 @@ export default function Mess({ sender, userId, index, mess }: IMessUser) {
         }`}
       >
         <div className="d-flex flex-column" style={{ maxWidth: "60%" }}>
+          {index === 0 ||
+          (index > 0 && mess[index - 1].user.id !== mess[index].user.id) ? (
+            <div className="time-mess">{mess[index].user.full_name}</div>
+          ) : null}
           <div
             className={`${
               sender.sender_id !== userId ? "your-message" : "other-people"

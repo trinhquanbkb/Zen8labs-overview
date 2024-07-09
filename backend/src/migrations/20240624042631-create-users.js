@@ -18,6 +18,9 @@ module.exports = {
       nick_name: {
         type: Sequelize.STRING,
       },
+      full_name: {
+        type: Sequelize.STRING,
+      },
       email: {
         type: Sequelize.STRING,
       },
@@ -52,6 +55,16 @@ module.exports = {
       },
       socket: {
         type: Sequelize.STRING,
+      },
+      about: {
+        type: Sequelize.STRING,
+      },
+      last_online: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+      dob: {
+        type: Sequelize.DATE,
       },
       facebook_auth: {
         type: Sequelize.STRING,

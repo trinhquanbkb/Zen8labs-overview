@@ -10,6 +10,7 @@ dotenv.config();
 export interface DataStoredInToken {
   id?: number;
   first_name?: string;
+  full_name?: string;
   last_name?: string;
   nick_name?: string;
   avatar?: string;
@@ -23,6 +24,7 @@ const createToken = (user: UsersModel) => {
     id: user.id,
     first_name: user.first_name,
     last_name: user.last_name,
+    full_name: user.full_name,
     nick_name: user.nick_name,
     avatar: user.avatar,
   };
@@ -62,12 +64,33 @@ const getListUser = async (req: IUserRequest) => {
           ],
         },
       });
+      const group_id = await db.user_groups.findAll({
+        where: {
+          user_id: item.dataValues.id,
+        },
+      });
       return {
         ...item.dataValues,
         converstations_id: converstations_id.map((c: any) => c.dataValues.id),
+        group_id: group_id.map((c: any) => c.dataValues.group_id),
       };
     })
   );
+};
+
+const searchListUser = async (keyword: string) => {
+  const users = await db.users.findAll({
+    where: {
+      [Op.or]: [
+        { first_name: { [Op.iLike]: `%${keyword}%` } },
+        { last_name: { [Op.iLike]: `%${keyword}%` } },
+        { full_name: { [Op.iLike]: `%${keyword}%` } },
+        { nick_name: { [Op.iLike]: `%${keyword}%` } },
+      ],
+    },
+    attributes: { exclude: ["password"] },
+  });
+  return users;
 };
 
 const getListUserOnline = async () => {
@@ -93,27 +116,46 @@ const createUser = async (req: IUserRequest) => {
   if (req.email && req.password) {
     const salt = bcrypt.genSaltSync(10);
     const hashPassword = bcrypt.hashSync(req.password, salt);
-    return await db.users.create({ ...req, password: hashPassword });
+    const fullname = req.first_name + " " + req.last_name;
+    return await db.users.create({
+      ...req,
+      password: hashPassword,
+      full_name: fullname,
+    });
   } else {
     return new Error("Field missing filling");
   }
 };
 
 const updateUser = async (body: IUserRequest, params: IUserRequest) => {
-  return await db.users.update(
-    { ...body },
-    {
-      where: {
-        ...params,
-      },
-    }
-  );
+  let fullname;
+  if (body.first_name && body.last_name) {
+    fullname = body.first_name + " " + body.last_name;
+    return await db.users.update(
+      { ...body, full_name: fullname },
+      {
+        where: {
+          ...params,
+        },
+      }
+    );
+  } else {
+    return await db.users.update(
+      { ...body },
+      {
+        where: {
+          ...params,
+        },
+      }
+    );
+  }
 };
 
 export const UserService = {
   getDetailUser,
   getListUser,
   getListUserOnline,
+  searchListUser,
   createUser,
   createToken,
   updateUser,

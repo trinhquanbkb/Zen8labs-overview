@@ -4,20 +4,33 @@ import { useCookies } from "react-cookie";
 import { Col, Row } from "react-bootstrap";
 import { useGetAllUsersQuery } from "../../api/userApi";
 import { useGetMessageInConvertationQuery } from "../../api/messageApi";
-import { IUser } from "../../interfaces/users";
 import MessageBox from "./MessageBox";
 import TopMessageBox from "./TopMessageBox";
 import Loading from "../../components/Loading";
 import UserHold from "./UserHold";
 import Mess from "./Mess";
 import UserMessage from "./UserMessage";
+import Search from "../../components/Search";
 
 export interface IMess {
   message: string | null | undefined;
   receiver_id: number | null | undefined;
+  group_id: number | null | undefined;
   sender_id: number | null | undefined;
+  user: {
+    id: number;
+    full_name: string;
+  };
   created_at: string;
   updated_at: string;
+}
+
+export interface IReceiver {
+  id: number;
+  name: string;
+  avatar: string;
+  isGroup: boolean;
+  groupId: number;
 }
 
 export default function Chat() {
@@ -33,17 +46,19 @@ export default function Chat() {
   const [userId, setUserId] = useState<number | null>();
   const [mess, setMess] = useState<IMess[]>([]);
   const [message, setMessage] = useState("");
-  const [receiver, setReceiver] = useState<IUser>();
+  const [receiver, setReceiver] = useState<IReceiver>();
   const [offset, setOffset] = useState<number>(0);
   const [statusSend, setStatusSend] = useState<boolean>(false);
   const [listUserOnline, setListUserOnline] = useState<number[]>([]);
+  const [keyword, setKeyword] = useState("");
 
   // fetch data
-  const { data, isFetching } = useGetAllUsersQuery();
+  const { data } = useGetAllUsersQuery();
   const { data: dataMessage, isFetching: fetchingMessage } =
     useGetMessageInConvertationQuery({
       user_id_1: userId ?? 0,
-      user_id_2: receiver?.id ?? 0,
+      user_id_2: receiver?.id,
+      group_id: receiver?.groupId,
       offset: offset,
     });
 
@@ -82,6 +97,11 @@ export default function Chat() {
           socketRef.current.emit("joinRoom", conver);
         }
       });
+      convertations?.group_id.forEach((group: number) => {
+        if (socketRef.current) {
+          socketRef.current.emit("joinRoom", "group_" + group);
+        }
+      });
     }
   }, [data, userId]);
 
@@ -97,6 +117,8 @@ export default function Chat() {
           message: m.content,
           receiver_id: receiver?.id,
           sender_id: m.user_id,
+          group_id: m.group_id,
+          user: m.user,
           created_at: m.created_at.toString(),
           updated_at: m.updated_at.toString(),
         };
@@ -104,7 +126,7 @@ export default function Chat() {
 
       setMess([...messConvert.reverse(), ...mess]);
     }
-  }, [fetchingMessage, receiver]);
+  }, [fetchingMessage]);
 
   useEffect(() => {
     if (chatContainerRef.current && mess.length > 0 && !statusSend) {
@@ -136,6 +158,7 @@ export default function Chat() {
       const msg = {
         message: message,
         sender_id: userId,
+        group_id: receiver?.groupId,
         receiver_id: receiver ? receiver.id : null,
       };
       if (socketRef.current) {
@@ -146,13 +169,35 @@ export default function Chat() {
   };
 
   const renderMess = () => {
-    return mess.map((m, index) => {
-      if (m.sender_id !== userId) {
-        return <Mess sender={m} index={index} mess={mess} userId={userId} />;
-      } else {
-        return <Mess sender={m} index={index} mess={mess} userId={userId} />;
-      }
-    });
+    if (receiver?.isGroup) {
+      return mess
+        .filter((m) => m.group_id)
+        .map((m, index) => {
+          if (m.sender_id !== userId) {
+            return (
+              <Mess sender={m} index={index} mess={mess} userId={userId} />
+            );
+          } else {
+            return (
+              <Mess sender={m} index={index} mess={mess} userId={userId} />
+            );
+          }
+        });
+    } else {
+      return mess
+        .filter((m) => m.receiver_id)
+        .map((m, index) => {
+          if (m.sender_id !== userId) {
+            return (
+              <Mess sender={m} index={index} mess={mess} userId={userId} />
+            );
+          } else {
+            return (
+              <Mess sender={m} index={index} mess={mess} userId={userId} />
+            );
+          }
+        });
+    }
   };
 
   return (
@@ -169,31 +214,28 @@ export default function Chat() {
                   : ""
               }
             />
-            {isFetching && !userId
-              ? null
-              : data
-              ? data
-                  .filter((item) => item.id !== userId)
-                  .map((u: IUser) => {
-                    return (
-                      <div key={u.id}>
-                        <UserMessage
-                          chat={null}
-                          avatar={null}
-                          name={u.first_name + " " + u.last_name}
-                          online={listUserOnline.includes(u.id)}
-                          onChooseUser={() => {
-                            setReceiver(u);
-                            setMessage("");
-                            setMess([]);
-                            setOffset(0);
-                            setScrollHeight(0);
-                          }}
-                        />
-                      </div>
-                    );
-                  })
-              : null}
+            <Search
+              value={keyword}
+              onChangeValue={(value: string) => setKeyword(value)}
+            />
+
+            <UserMessage
+              userId={userId}
+              listUserOnline={listUserOnline}
+              keyword={keyword}
+              onChooseUser={(value: any) => {
+                if (
+                  value.id !== receiver?.id ||
+                  value.groupId !== receiver?.groupId
+                ) {
+                  setReceiver(value);
+                  setMessage("");
+                  setMess([]);
+                  setOffset(0);
+                  setScrollHeight(0);
+                }
+              }}
+            />
           </div>
         </Col>
 
@@ -202,7 +244,11 @@ export default function Chat() {
             <div className="chat-wrapper ms-0">
               <div className="chat-socket d-flex flex-column justify-content-between">
                 <TopMessageBox
-                  online={listUserOnline.includes(receiver.id)}
+                  online={
+                    receiver.isGroup
+                      ? true
+                      : listUserOnline.includes(receiver.id)
+                  }
                   receiver={receiver}
                 />
                 <div
@@ -234,6 +280,11 @@ export default function Chat() {
                         receiver_id: receiver ? receiver?.id : null,
                         message: value,
                         sender_id: userId,
+                        user: {
+                          id: cookies.user_infor.id,
+                          full_name: cookies.user_infor.full_name,
+                        },
+                        group_id: receiver.groupId,
                         created_at: now.toISOString(),
                         updated_at: now.toISOString(),
                       },

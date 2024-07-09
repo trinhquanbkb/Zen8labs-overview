@@ -10,6 +10,27 @@ const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
+const getUserDetail = async (req: Request, res: Response) => {
+  try {
+    const user = await UserService.getDetailUser({ id: Number(req.params.id) });
+    res.status(200).send(user);
+  } catch (error) {
+    res.status(500).send(`${error}`);
+  }
+};
+
+const searchUser = async (req: Request, res: Response) => {
+  try {
+    const keyword = req.query.keyword as string;
+    const users = await UserService.searchListUser(keyword);
+    res.status(200).send(users);
+  } catch (error) {
+    res.status(500).send(`${error}`);
+  }
+};
+
 export const UserController = {
   getAllUsers,
+  getUserDetail,
+  searchUser,
 };

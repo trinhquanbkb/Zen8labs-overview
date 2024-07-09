@@ -15,7 +15,29 @@ const categoriesApi = api.injectEndpoints({
         return currentArg !== previousArg;
       },
     }),
+    searchUsers: build.query<IUser[], { keyword: string }>({
+      query: ({ keyword }) => ({
+        url: `/users/search?keyword=${keyword}`,
+        method: "GET",
+      }),
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
+      },
+    }),
+    getDetailUser: build.query<IUser, { id: number | null }>({
+      query: ({ id }) => ({
+        url: `/users/${id}`,
+        method: "GET",
+      }),
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
+      },
+    }),
   }),
 });
 
-export const { useGetAllUsersQuery } = categoriesApi;
+export const {
+  useGetAllUsersQuery,
+  useGetDetailUserQuery,
+  useSearchUsersQuery,
+} = categoriesApi;

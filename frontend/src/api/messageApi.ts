@@ -14,10 +14,15 @@ const messagesApi = api.injectEndpoints({
         limit: number;
         data: IMessage[];
       },
-      { user_id_1: number; user_id_2: number; offset: number }
+      {
+        user_id_1: number;
+        user_id_2: number | null | undefined;
+        offset: number;
+        group_id: number | null | undefined;
+      }
     >({
-      query: (query) => ({
-        url: `/messages?user_id_1=${query.user_id_1}&user_id_2=${query.user_id_2}&offset=${query.offset}`,
+      query: ({ user_id_1, user_id_2, group_id, offset }) => ({
+        url: `/messages?user_id_1=${user_id_1}&user_id_2=${user_id_2}&offset=${offset}&group_id=${group_id}`,
         method: "GET",
       }),
       // Refetch when the page arg changes

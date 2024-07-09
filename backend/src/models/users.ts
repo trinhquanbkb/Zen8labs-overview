@@ -4,6 +4,7 @@ export class users extends Model {
   public id!: number;
   public first_name!: string;
   public last_name!: string;
+  public full_name!: string;
   public nick_name!: string;
   public email!: string;
   public phone!: string;
@@ -15,6 +16,9 @@ export class users extends Model {
   public blocked!: boolean;
   public socket!: string;
   public code!: string;
+  public last_online!: Date;
+  public dob!: Date;
+  public about!: string;
   public facebook_auth!: string;
   public google_auth!: string;
   public created_at!: Date;
@@ -23,6 +27,9 @@ export class users extends Model {
   public static associate(models: any) {
     this.belongsTo(models.roles, { foreignKey: "role_id" });
     this.hasMany(models.messages, {
+      foreignKey: "user_id",
+    });
+    this.hasMany(models.user_groups, {
       foreignKey: "user_id",
     });
   }
@@ -38,6 +45,7 @@ export default (sequelize: Sequelize) => {
       },
       first_name: DataTypes.STRING,
       last_name: DataTypes.STRING,
+      full_name: DataTypes.STRING,
       nick_name: DataTypes.STRING,
       email: DataTypes.STRING,
       phone: DataTypes.STRING,
@@ -51,6 +59,15 @@ export default (sequelize: Sequelize) => {
       socket: DataTypes.STRING,
       facebook_auth: DataTypes.STRING,
       google_auth: DataTypes.STRING,
+      dob: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+      },
+      about: DataTypes.TEXT,
+      last_online: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+      },
       created_at: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,

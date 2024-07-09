@@ -79,9 +79,10 @@ const refreshToken = async (req: Request, res: Response) => {
         id: decode.id,
         blocked: false,
         deleted: false,
-        google_auth: null,
-        facebook_auth: null,
       });
+      if (!results) {
+        res.status(401).send("Account not exist or deleted!");
+      }
       const token = UserService.createToken(results.dataValues);
       res.status(200).send({
         message: "Refresh token success",
@@ -92,7 +93,7 @@ const refreshToken = async (req: Request, res: Response) => {
         },
       });
     } else {
-      res.status(404).send("Refresh token expired!");
+      res.status(401).send("Refresh token expired!");
     }
   } catch (err) {
     res.status(500).send(`${err}`);

@@ -3,6 +3,7 @@ export interface UsersModel {
   first_name: string;
   last_name: string;
   nick_name?: string;
+  full_name?: string;
   email: string;
   phone?: string;
   address?: string;
@@ -15,6 +16,9 @@ export interface UsersModel {
   code?: string;
   facebook_auth?: string | null;
   google_auth?: string | null;
+  last_online?: Date;
+  about?: string;
+  dob?: Date;
 }
 
 export interface IUserResponse {
@@ -22,6 +26,7 @@ export interface IUserResponse {
   first_name: string;
   last_name: string;
   nick_name?: string;
+  full_name?: string;
   email: string;
   phone?: string;
   address?: string;
@@ -34,6 +39,9 @@ export interface IUserResponse {
   code?: string;
   deleted?: boolean;
   blocked?: boolean;
+  last_online?: Date;
+  dob?: Date;
+  about?: string;
 }
 
 export interface IUserRequest {
@@ -41,6 +49,7 @@ export interface IUserRequest {
   first_name?: string;
   last_name?: string;
   nick_name?: string;
+  full_name?: string;
   password?: string;
   avatar?: string;
   email?: string;
@@ -50,8 +59,11 @@ export interface IUserRequest {
   blocked?: boolean;
   created_at?: Date;
   updated_at?: Date;
+  dob?: Date;
   code?: string;
   socket?: string;
   facebook_auth?: string | null;
   google_auth?: string | null;
+  last_online?: Date;
+  about?: string;
 }

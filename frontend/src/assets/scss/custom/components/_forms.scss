@@ -157,7 +157,7 @@ input.form-control[type="range"] {
 }
 
 .rbt-input-multi.form-control {
-	height: 37px;
+	height: 40px;
 }
 
 .rbt-input-multi {
@@ -177,7 +177,7 @@ input.form-control[type="range"] {
 
 .rbt-token-removeable {
 	cursor: pointer;
-	padding-right: 28px !important;
+	padding-right: 6px !important;
 
 	.close {
 		background-image: none !important;
@@ -190,7 +190,7 @@ input.form-control[type="range"] {
 	display: inline-block;
 	line-height: 1em;
 	margin: 1px 3px 2px 0;
-	padding: 4px 7px;
+	padding: 2px 8px;
 	position: relative;
 	background-color: rgba(83, 105, 248, 0.2) !important;
 	color: #5369f8 !important;

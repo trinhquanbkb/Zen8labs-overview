@@ -11,6 +11,9 @@ const CheckCode = React.lazy(() => import("../pages/auth/CheckCode"));
 const ResetPassword = React.lazy(() => import("../pages/auth/ResetPassword"));
 const Register = React.lazy(() => import("../pages/auth/Register"));
 
+// user
+const Information = React.lazy(() => import("../pages/user/Information"));
+
 //error
 const Error404 = React.lazy(() => import("../pages/error/Error404"));
 const Error500 = React.lazy(() => import("../pages/error/Error500"));
@@ -45,6 +48,13 @@ const projectAppRoutes: RoutesProps[] = [
     route: Route,
     icon: "chat",
     component: Chat,
+  },
+  {
+    path: "/user-infor",
+    name: "User Infor",
+    route: Route,
+    icon: "user",
+    component: Information,
   },
 ];
 

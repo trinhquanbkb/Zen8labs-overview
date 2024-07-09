@@ -4,7 +4,7 @@
 
 /* Search */
 .chat-search {
-  height: $topbar-height;
+  height: 50px;
   display: table;
   width: 100%;
   .chat-search-box {
@@ -300,4 +300,9 @@
 .time-mess {
   margin-top: 6px;
   font-size: 12px;
+}
+
+.list-user-search {
+  overflow-y: auto;
+  height: 425px;
 }
