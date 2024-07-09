@@ -29,8 +29,22 @@ const searchUser = async (req: Request, res: Response) => {
   }
 };
 
+const updateUser = async (req: Request, res: Response) => {
+  try {
+    const users = await UserService.updateUser(req.body, {
+      id: Number(req.params.id),
+    });
+    if (users) {
+      res.status(200).send("Update success!");
+    }
+  } catch (error) {
+    res.status(500).send(`${error}`);
+  }
+};
+
 export const UserController = {
   getAllUsers,
   getUserDetail,
   searchUser,
+  updateUser,
 };

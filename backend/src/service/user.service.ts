@@ -132,7 +132,11 @@ const updateUser = async (body: IUserRequest, params: IUserRequest) => {
   if (body.first_name && body.last_name) {
     fullname = body.first_name + " " + body.last_name;
     return await db.users.update(
-      { ...body, full_name: fullname },
+      {
+        ...body,
+        full_name: fullname,
+        dob: body.dob ? new Date(body.dob) : null,
+      },
       {
         where: {
           ...params,
@@ -145,6 +149,7 @@ const updateUser = async (body: IUserRequest, params: IUserRequest) => {
       {
         where: {
           ...params,
+          dob: body.dob ? new Date(body.dob) : null,
         },
       }
     );

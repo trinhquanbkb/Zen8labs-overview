@@ -14,6 +14,7 @@ const categoriesApi = api.injectEndpoints({
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg;
       },
+      providesTags: [{ type: "User", id: "LIST" }],
     }),
     searchUsers: build.query<IUser[], { keyword: string }>({
       query: ({ keyword }) => ({
@@ -23,6 +24,7 @@ const categoriesApi = api.injectEndpoints({
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg;
       },
+      providesTags: [{ type: "User", id: "SEARCH" }],
     }),
     getDetailUser: build.query<IUser, { id: number | null }>({
       query: ({ id }) => ({
@@ -32,6 +34,33 @@ const categoriesApi = api.injectEndpoints({
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg;
       },
+      providesTags: [{ type: "User", id: "DETAIL" }],
+    }),
+    updateUser: build.mutation<
+      IUser,
+      {
+        id: number;
+        first_name: string;
+        last_name: string;
+        nick_name: string;
+        email: string;
+        phone: string;
+        address: string;
+        avatar: string;
+        dob: string;
+        about: string;
+      }
+    >({
+      query: ({ id, ...data }) => ({
+        url: `/users/${id}`,
+        method: "PUT",
+        data,
+      }),
+      invalidatesTags: [
+        { type: "User", id: "LIST" },
+        { type: "User", id: "DETAIL" },
+        { type: "User", id: "SEARCH" },
+      ],
     }),
   }),
 });
@@ -40,4 +69,5 @@ export const {
   useGetAllUsersQuery,
   useGetDetailUserQuery,
   useSearchUsersQuery,
+  useUpdateUserMutation,
 } = categoriesApi;

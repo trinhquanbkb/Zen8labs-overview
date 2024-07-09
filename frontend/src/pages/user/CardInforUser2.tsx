@@ -3,6 +3,7 @@ import { Card } from "react-bootstrap";
 import FormEditUser from "./FormEditUser";
 
 export interface ICardInforUser2 {
+  id: number;
   first_name: string | undefined;
   last_name: string | undefined;
   avatar: string | undefined;

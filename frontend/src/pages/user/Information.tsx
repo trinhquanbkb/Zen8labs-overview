@@ -34,6 +34,7 @@ export default function Information() {
           </Col>
           <Col xs={12} md={8}>
             <CardInforUser2
+              id={data.id}
               first_name={data.first_name}
               last_name={data.last_name}
               avatar={data.avatar}
