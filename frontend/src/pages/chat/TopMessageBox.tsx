@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { IReceiver } from "./Chat";
 import { Dropdown } from "react-bootstrap";
-import ModalCreateGroup from "./ModalCreateGroup";
 import logoImg from "../../assets/images/logo_chat.png";
 import classNames from "classnames";
+import ModalInformationUser from "./Modals/ModalInformationUser";
+import ModalInvite from "./Modals/ModalInvite";
+import ModalViewUser from "./Modals/ModalViewUser";
+import ModalDeleteGroup from "./Modals/ModalDeleteGroup";
 
 interface ITopMessageBox {
   receiver: IReceiver;
@@ -12,7 +15,11 @@ interface ITopMessageBox {
 
 export default function TopMessageBox({ receiver, online }: ITopMessageBox) {
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
-  const [showModalGroup, setShowModalGroup] = useState<boolean>(false);
+  const [showModalInformation, setShowModalInformation] =
+    useState<boolean>(false);
+  const [showModalInvite, setShowModalInvite] = useState<boolean>(false);
+  const [showModalViewUser, setShowModalViewUser] = useState<boolean>(false);
+  const [showModalDelete, setShowModalDelete] = useState<boolean>(false);
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -61,27 +68,58 @@ export default function TopMessageBox({ receiver, online }: ITopMessageBox) {
                 <i className="bi bi-three-dots-vertical"></i>
               </Dropdown.Toggle>
               <Dropdown.Menu className="dropdown-menu-end">
-                <Dropdown.Item
-                  onClick={() => setShowModalGroup(!showModalGroup)}
-                >
-                  <i className="bi bi-people fs-16 me-2"></i>New Group
-                </Dropdown.Item>
-                <Dropdown.Item>
-                  <i className="bi bi-person-lines-fill fs-16 me-2"></i>
-                  Information
-                </Dropdown.Item>
-                <Dropdown.Item>
-                  <i className="bi bi-person-plus fs-16 me-2"></i>Invite Friends
-                </Dropdown.Item>
+                {receiver.isGroup ? (
+                  <>
+                    <Dropdown.Item onClick={() => setShowModalViewUser(true)}>
+                      <i className="bi bi-person fs-16 me-2"></i>View users
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={() => setShowModalInvite(true)}>
+                      <i className="bi bi-person-plus fs-16 me-2"></i>Invite
+                      friends
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={() => setShowModalDelete(true)}>
+                      <i className="bi bi-trash fs-16 me-2"></i>Delete group
+                    </Dropdown.Item>
+                  </>
+                ) : (
+                  <>
+                    <Dropdown.Item
+                      onClick={() => setShowModalInformation(true)}
+                    >
+                      <i className="bi bi-person-lines-fill fs-16 me-2"></i>
+                      Information
+                    </Dropdown.Item>
+                  </>
+                )}
               </Dropdown.Menu>
             </Dropdown>
           </div>
-          <ModalCreateGroup
-            show={showModalGroup}
-            handleShow={(value: boolean) => setShowModalGroup(value)}
-          />
         </>
       ) : null}
+
+      <ModalInformationUser
+        id={receiver.id}
+        show={showModalInformation}
+        handleShow={(value: boolean) => setShowModalInformation(value)}
+      />
+
+      <ModalInvite
+        groupId={receiver.groupId}
+        show={showModalInvite}
+        handleShow={(value: boolean) => setShowModalInvite(value)}
+      />
+
+      <ModalViewUser
+        groupId={receiver.groupId}
+        show={showModalViewUser}
+        handleShow={(value: boolean) => setShowModalViewUser(value)}
+      />
+
+      <ModalDeleteGroup
+        groupId={receiver.groupId}
+        show={showModalDelete}
+        handleShow={(value: boolean) => setShowModalDelete(value)}
+      />
     </div>
   );
 }

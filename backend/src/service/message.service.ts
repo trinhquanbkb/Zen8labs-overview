@@ -33,6 +33,7 @@ const getMessageInConvertation = async ({
     const group = await db.groups.findOne({
       where: {
         id: group_id,
+        is_delete: false,
       },
     });
     if (group) {

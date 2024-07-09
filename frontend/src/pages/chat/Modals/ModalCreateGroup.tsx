@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { Typeahead } from "react-bootstrap-typeahead";
-import { useGetAllUsersQuery } from "../../api/userApi";
-import { useCreateGroupMutation } from "../../api/groupApi";
+import { useGetAllUsersQuery } from "../../../api/userApi";
+import { useCreateGroupMutation } from "../../../api/groupApi";
 import { toast } from "react-toastify";
 
 interface IModalCreateGroup {
@@ -14,7 +14,7 @@ interface IModalCreateGroup {
 interface Option {
   id: number | string;
   label: string;
-  value: string | string;
+  value: string | number;
 }
 
 export default function ModalCreateGroup({

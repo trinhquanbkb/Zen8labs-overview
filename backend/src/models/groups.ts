@@ -5,6 +5,7 @@ export class groups extends Model {
   public id!: number;
   public name!: string;
   public avatar!: string;
+  public is_delete!: boolean;
   public created_at!: Date;
   public updated_at!: Date;
 
@@ -24,6 +25,10 @@ export default (sequelize: Sequelize) => {
       },
       name: DataTypes.TEXT,
       avatar: DataTypes.TEXT,
+      is_delete: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
       created_at: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,

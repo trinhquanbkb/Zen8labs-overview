@@ -10,7 +10,7 @@ export class user_groups extends Model {
 
   public static associate(models: any) {
     this.belongsTo(models.users, { foreignKey: "user_id" });
-    this.belongsTo(models.groups, { foreignKey: "group_id" });
+    this.belongsTo(models.groups, { foreignKey: "group_id" as "group" });
   }
 }
 export default (sequelize: Sequelize) => {

@@ -8,7 +8,7 @@ import { IUser } from "../../interfaces/users";
 import { useSearchUsersQuery } from "../../api/userApi";
 import { useSearchGroupsQuery } from "../../api/groupApi";
 import { IGroup } from "../../interfaces/group";
-import ModalCreateGroup from "./ModalCreateGroup";
+import ModalCreateGroup from "./Modals/ModalCreateGroup";
 
 interface IUserMess {
   avatar?: string | null;

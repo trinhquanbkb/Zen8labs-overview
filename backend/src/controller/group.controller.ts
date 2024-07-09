@@ -26,12 +26,36 @@ const searchGroup = async (req: Request, res: Response) => {
   }
 };
 
+const getDetailGroup = async (req: Request, res: Response) => {
+  try {
+    const groups = await groupService.getDetailGroup({
+      id: Number(req.params.id),
+    });
+    res.status(200).send(groups);
+  } catch (error) {
+    res.status(500).send(`${error}`);
+  }
+};
+
 const createGroup = async (req: Request, res: Response) => {
   try {
     const group = await groupService.createGroup(req.body);
-    console.log(group);
     if (group) {
       res.status(201).send(group);
+    }
+  } catch (error) {
+    res.status(500).send(`${error}`);
+  }
+};
+
+const updateGroup = async (req: Request, res: Response) => {
+  try {
+    const group = await groupService.updateGroup(
+      Number(req.params.id),
+      req.body
+    );
+    if (group) {
+      res.status(201).send("Update group success!");
     }
   } catch (error) {
     res.status(500).send(`${error}`);
@@ -41,4 +65,6 @@ const createGroup = async (req: Request, res: Response) => {
 export const GroupController = {
   searchGroup,
   createGroup,
+  getDetailGroup,
+  updateGroup,
 };

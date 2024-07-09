@@ -40,7 +40,7 @@ export default function Mess({ sender, userId, index, mess }: IMessUser) {
             (mess[index + 1].sender_id !== sender.sender_id ||
               isDifferentDay(sender.updated_at, mess[index + 1].updated_at)) ? (
               <div
-                className={`time-mess d-flex ${
+                className={`time-mess mb-2 d-flex ${
                   sender.sender_id !== userId
                     ? "justify-content-end"
                     : "justify-content-start"
@@ -51,7 +51,7 @@ export default function Mess({ sender, userId, index, mess }: IMessUser) {
             ) : null
           ) : index + 1 === mess.length ? (
             <div
-              className={`time-mess d-flex ${
+              className={`time-mess mb-2 d-flex ${
                 sender.sender_id !== userId
                   ? "justify-content-end"
                   : "justify-content-start"

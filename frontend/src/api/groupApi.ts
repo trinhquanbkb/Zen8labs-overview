@@ -16,6 +16,16 @@ const groupsApi = api.injectEndpoints({
       },
       providesTags: [{ type: "Group", id: "SEARCH" }],
     }),
+    getDetailGroup: build.query<IGroup, { id: number }>({
+      query: ({ id }) => ({
+        url: `/groups/${id}`,
+        method: "GET",
+      }),
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg;
+      },
+      providesTags: [{ type: "Group", id: "DETAIL" }],
+    }),
     createGroup: build.mutation<
       IGroup,
       { users: number[]; name: string; avatar: string | null }
@@ -25,9 +35,37 @@ const groupsApi = api.injectEndpoints({
         method: "POST",
         data,
       }),
-      invalidatesTags: [{ type: "Group", id: "SEARCH" }],
+      invalidatesTags: [
+        { type: "Group", id: "SEARCH" },
+        { type: "Group", id: "DETAIL" },
+      ],
+    }),
+    updateGroup: build.mutation<
+      any,
+      {
+        id: number;
+        name?: string;
+        userId?: number[];
+        avatar?: string;
+        is_delete?: boolean;
+      }
+    >({
+      query: ({ id, ...data }) => ({
+        url: `/groups/${id}`,
+        method: "PUT",
+        data,
+      }),
+      invalidatesTags: [
+        { type: "Group", id: "SEARCH" },
+        { type: "Group", id: "DETAIL" },
+      ],
     }),
   }),
 });
 
-export const { useSearchGroupsQuery, useCreateGroupMutation } = groupsApi;
+export const {
+  useSearchGroupsQuery,
+  useCreateGroupMutation,
+  useGetDetailGroupQuery,
+  useUpdateGroupMutation,
+} = groupsApi;
