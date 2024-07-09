@@ -52,6 +52,6 @@ const baseQuery = axiosBaseQuery({
 export const api = createApi({
   baseQuery: baseQuery,
   reducerPath: "api",
-  tagTypes: ["Auth", "User"],
+  tagTypes: ["Auth", "User", "Group"],
   endpoints: () => ({}),
 });

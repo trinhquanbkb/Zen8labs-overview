@@ -17,7 +17,6 @@ const getListGroup = async (req: IGroupRequest) => {
 };
 
 const searchGroup = async (keyword: string, user_id: number) => {
-  console.log(user_id);
   const userGroup = await db.user_groups.findAll({
     where: {
       user_id: user_id,
@@ -38,11 +37,25 @@ const searchGroup = async (keyword: string, user_id: number) => {
   return groups;
 };
 
-const createGroup = async (req: IGroupRequest) => {
-  return await db.groups.create({
+const createGroup = async (req: any) => {
+  const group = await db.groups.create({
     name: req.name,
     avatar: req.avatar,
   });
+
+  if (req.users.length <= 2) {
+    return new Error("Cannot create group with quantity user < 2");
+  } else {
+    await Promise.all(
+      req.users.map(async (item: number) => {
+        return await db.user_groups.create({
+          group_id: group.id,
+          user_id: item,
+        });
+      })
+    );
+    return group;
+  }
 };
 
 export const groupService = {

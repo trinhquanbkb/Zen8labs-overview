@@ -26,6 +26,19 @@ const searchGroup = async (req: Request, res: Response) => {
   }
 };
 
+const createGroup = async (req: Request, res: Response) => {
+  try {
+    const group = await groupService.createGroup(req.body);
+    console.log(group);
+    if (group) {
+      res.status(201).send(group);
+    }
+  } catch (error) {
+    res.status(500).send(`${error}`);
+  }
+};
+
 export const GroupController = {
   searchGroup,
+  createGroup,
 };

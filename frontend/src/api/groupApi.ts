@@ -14,8 +14,20 @@ const groupsApi = api.injectEndpoints({
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg;
       },
+      providesTags: [{ type: "Group", id: "SEARCH" }],
+    }),
+    createGroup: build.mutation<
+      IGroup,
+      { users: number[]; name: string; avatar: string | null }
+    >({
+      query: (data) => ({
+        url: `/groups`,
+        method: "POST",
+        data,
+      }),
+      invalidatesTags: [{ type: "Group", id: "SEARCH" }],
     }),
   }),
 });
 
-export const { useSearchGroupsQuery } = groupsApi;
+export const { useSearchGroupsQuery, useCreateGroupMutation } = groupsApi;

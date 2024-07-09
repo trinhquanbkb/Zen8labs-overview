@@ -8,6 +8,7 @@ import { IUser } from "../../interfaces/users";
 import { useSearchUsersQuery } from "../../api/userApi";
 import { useSearchGroupsQuery } from "../../api/groupApi";
 import { IGroup } from "../../interfaces/group";
+import ModalCreateGroup from "./ModalCreateGroup";
 
 interface IUserMess {
   avatar?: string | null;
@@ -65,6 +66,7 @@ export default function UserMessage({
   keyword,
 }: IUserMessage) {
   const [form, setForm] = useState(false);
+  const [showModalGroup, setShowModalGroup] = useState<boolean>(false);
 
   const { data: dataSearchUser, isFetching: fetchingSearchUser } =
     useSearchUsersQuery({ keyword: keyword });
@@ -91,7 +93,12 @@ export default function UserMessage({
           </Button>
         </ButtonGroup>
 
-        <Button className="p-1">
+        <Button
+          className="p-1"
+          onClick={() => {
+            setShowModalGroup(true);
+          }}
+        >
           <FeatherIcon icon={"plus"} className="icon-xs me-1" />
           Group
         </Button>
@@ -152,6 +159,11 @@ export default function UserMessage({
             })
           : null}
       </div>
+
+      <ModalCreateGroup
+        show={showModalGroup}
+        handleShow={(value: boolean) => setShowModalGroup(value)}
+      />
     </>
   );
 }
