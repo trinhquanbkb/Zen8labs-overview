@@ -84,7 +84,7 @@ export default function ForgetPassword() {
         >
           <FormInput
             label={"New Password"}
-            type="text"
+            type="password"
             name="newPassword"
             placeholder={"********"}
             containerClass={"mb-3"}
@@ -92,7 +92,7 @@ export default function ForgetPassword() {
 
           <FormInput
             label={"Retype new password"}
-            type="text"
+            type="password"
             name="retypeNewPassword"
             placeholder={"********"}
             containerClass={"mb-3"}

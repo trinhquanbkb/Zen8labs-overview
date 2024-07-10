@@ -50,6 +50,9 @@ const register = async (req: Request, res: Response) => {
     const results = await UserService.getDetailUser({
       email: req.body.email,
       deleted: false,
+      blocked: false,
+      facebook_auth: null,
+      google_auth: null,
     });
     if (results) {
       res.status(401).send(`Email is exist`);
@@ -102,14 +105,38 @@ const refreshToken = async (req: Request, res: Response) => {
 
 const sendMailForgetPassword = async (req: Request, res: Response) => {
   try {
-    const user = await UserService.getDetailUser({ email: req.body.mail });
-    if (user) {
+    const user = await UserService.getDetailUser({
+      email: req.body.mail,
+      facebook_auth: null,
+      google_auth: null,
+      deleted: false,
+      blocked: false,
+    });
+    if (user.dataValues) {
       const code = generateRandomString(30);
-      await UserService.updateUser({ code: code }, { email: req.body.mail });
+      await UserService.updateUser(
+        { code: code },
+        {
+          email: req.body.mail,
+          facebook_auth: null,
+          google_auth: null,
+          deleted: false,
+          blocked: false,
+        }
+      );
 
       // schedule delete code
       schedule.scheduleJob(new Date(Date.now() + 10 * 60 * 1000), async () => {
-        await UserService.updateUser({ code: "" }, { email: req.body.mail });
+        await UserService.updateUser(
+          { code: "" },
+          {
+            email: req.body.mail,
+            facebook_auth: null,
+            google_auth: null,
+            deleted: false,
+            blocked: false,
+          }
+        );
       });
 
       mailService
@@ -148,6 +175,8 @@ const checkCodeForgetPassword = async (req: Request, res: Response) => {
     const user = await UserService.getDetailUser({ code: req.body.code });
     if (user) {
       res.status(200).send("Verify code success!");
+    } else {
+      res.status(404).send("Not found code!");
     }
   } catch (error) {
     res.status(500).send(`${error}`);
@@ -161,8 +190,8 @@ const resetPassword = async (req: Request, res: Response) => {
       const salt = bcrypt.genSaltSync(10);
       const hashPassword = bcrypt.hashSync(req.body.newPassword, salt);
       await UserService.updateUser(
-        { code: req.body.code },
-        { password: hashPassword }
+        { password: hashPassword },
+        { code: req.body.code }
       );
       res.status(200).send("Change password success!");
     }

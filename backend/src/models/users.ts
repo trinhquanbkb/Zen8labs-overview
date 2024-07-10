@@ -59,10 +59,7 @@ export default (sequelize: Sequelize) => {
       socket: DataTypes.STRING,
       facebook_auth: DataTypes.STRING,
       google_auth: DataTypes.STRING,
-      dob: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-      },
+      dob: DataTypes.DATE,
       about: DataTypes.TEXT,
       last_online: {
         type: DataTypes.DATE,

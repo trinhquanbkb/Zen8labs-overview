@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { UserService } from "../service/user.service";
+import jwt from "jsonwebtoken";
 
 const getAllUsers = async (req: Request, res: Response) => {
   try {
@@ -22,7 +23,14 @@ const getUserDetail = async (req: Request, res: Response) => {
 const searchUser = async (req: Request, res: Response) => {
   try {
     const keyword = req.query.keyword as string;
-    const users = await UserService.searchListUser(keyword);
+    const access_token = req.headers.authorization
+      ? req.headers.authorization.split("Bearer ")[1]
+      : "";
+    const decode: any = jwt.verify(
+      access_token,
+      process.env.HASH_ACCESS_TOKEN as string
+    );
+    const users = await UserService.searchListUser(keyword, Number(decode.id));
     res.status(200).send(users);
   } catch (error) {
     res.status(500).send(`${error}`);

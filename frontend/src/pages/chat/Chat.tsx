@@ -200,7 +200,6 @@ export default function Chat() {
         });
     }
   };
-  console.log(receiver);
 
   return (
     <>

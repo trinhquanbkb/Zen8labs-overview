@@ -78,7 +78,7 @@ const getListUser = async (req: IUserRequest) => {
   );
 };
 
-const searchListUser = async (keyword: string) => {
+const searchListUser = async (keyword: string, userId: number) => {
   const users = await db.users.findAll({
     where: {
       [Op.or]: [
@@ -90,7 +90,43 @@ const searchListUser = async (keyword: string) => {
     },
     attributes: { exclude: ["password"] },
   });
-  return users;
+  let result: any[] = [];
+  await Promise.all(
+    users.map(async (item: any) => {
+      const conversation = await db.convertations.findAll({
+        where: {
+          [Op.or]: [
+            { user_one: userId, user_two: item.dataValues.id },
+            { user_two: userId, user_one: item.dataValues.id },
+          ],
+        },
+      });
+      if (conversation.length > 0) {
+        const converstationId = conversation[0].dataValues.id;
+        const messageLast = await db.messages.findOne({
+          where: { convertation_id: converstationId },
+          order: [["updated_at", "DESC"]],
+        });
+        return result.push({
+          ...item.dataValues,
+          conversation: messageLast
+            ? {
+                id: converstationId,
+                last_message: messageLast.dataValues.content,
+                sender: messageLast.dataValues.user_id,
+              }
+            : null,
+        });
+      } else {
+        return result.push({
+          ...item.dataValues,
+          conversation: null,
+        });
+      }
+    })
+  );
+
+  return result;
 };
 
 const getListUserOnline = async () => {
@@ -145,11 +181,10 @@ const updateUser = async (body: IUserRequest, params: IUserRequest) => {
     );
   } else {
     return await db.users.update(
-      { ...body },
+      { ...body, dob: body.dob ? new Date(body.dob) : null },
       {
         where: {
           ...params,
-          dob: body.dob ? new Date(body.dob) : null,
         },
       }
     );

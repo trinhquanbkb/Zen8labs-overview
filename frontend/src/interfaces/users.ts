@@ -25,6 +25,11 @@ export interface IUser {
     id: number;
     full_name: string;
   };
+  conversation?: {
+    id: number;
+    last_message: string;
+    sender: number;
+  } | null;
 }
 
 export interface UserInforCookie {

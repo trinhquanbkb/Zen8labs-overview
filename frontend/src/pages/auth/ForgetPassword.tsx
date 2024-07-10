@@ -4,7 +4,7 @@ import logoImg from "../../assets/images/logo_zen8.png";
 import VerticalForm from "../../components/VerticalForm";
 import FormInput from "../../components/FormInput";
 import FeatherIcons from "feather-icons-react";
-import { toast } from "react-toastify"; 
+import { toast } from "react-toastify";
 import { Button, Col, Row } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { useSendMailForgetPasswordMutation } from "../../api/authApi";
@@ -41,12 +41,16 @@ export default function ForgetPassword() {
   };
 
   const onSubmit = async (formData: UserData) => {
-    const result = await apiSendMail({ mail: formData.email });
-    if (result.data) {
-      toast.success("Gửi mail thành công!");
-    } else {
-      toast.error("Gửi mail thất bại!");
-    }
+    toast.promise(
+      async () => {
+        await apiSendMail({ mail: formData.email });
+      },
+      {
+        pending: "Promise is pending",
+        success: "Send email success!",
+        error: "Send email error!",
+      }
+    );
   };
 
   return (

@@ -13,7 +13,11 @@ import ModalCreateGroup from "./Modals/ModalCreateGroup";
 interface IUserMess {
   avatar?: string | null;
   name: string;
-  chat?: string | null;
+  chat?: {
+    id: number;
+    last_message: string;
+    sender: number;
+  } | null;
   onChooseUser: any;
   online: boolean;
 }
@@ -51,9 +55,16 @@ const UserMess = ({ avatar, name, chat, onChooseUser, online }: IUserMess) => {
       <Col xs={10} className="d-flex flex-column justify-content-start">
         <p className="chat-name mb-1">{name}</p>
         <p className="chat-content fw-normal m-0">
-          {chat
-            ? chat
-            : "quanTooi la quanTooi la quanTooi la quanTooi la quanTooi la quanTooi la quanTooi la"}
+          {online ? "online" : "offline"}
+          {/* {chat ? (
+            chat.sender === cookies.user_infor.id ? (
+              <span>You: {chat.last_message}</span>
+            ) : (
+              <span className="fw-bold">{chat.last_message}</span>
+            )
+          ) : (
+            "No messages have been sent yet"
+          )} */}
         </p>
       </Col>
     </Row>
@@ -117,7 +128,7 @@ export default function UserMessage({
                   return (
                     <div key={u.id}>
                       <UserMess
-                        chat={null}
+                        chat={u.conversation}
                         avatar={logoImg}
                         name={u.first_name + " " + u.last_name}
                         online={listUserOnline.includes(u.id)}
