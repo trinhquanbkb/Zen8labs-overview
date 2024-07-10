@@ -5,10 +5,12 @@ export interface IGroup {
   is_delete: boolean;
   created_at?: Date;
   updated_at?: Date;
-  users: {
-    id: number;
-    first_name: string;
-    last_name: string;
-    nick_name: string;
-  }[];
+  users: IUserInGroup[];
+}
+
+export interface IUserInGroup {
+  id: number;
+  first_name: string;
+  last_name: string;
+  nick_name: string;
 }

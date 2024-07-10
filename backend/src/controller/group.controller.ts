@@ -62,9 +62,21 @@ const updateGroup = async (req: Request, res: Response) => {
   }
 };
 
+const deleteGroup = async (req: Request, res: Response) => {
+  try {
+    const group = await groupService.deleteGroup(Number(req.params.id));
+    if (group) {
+      res.status(200).send("Delete group success!");
+    }
+  } catch (error) {
+    res.status(500).send(`${error}`);
+  }
+};
+
 export const GroupController = {
   searchGroup,
   createGroup,
   getDetailGroup,
   updateGroup,
+  deleteGroup,
 };

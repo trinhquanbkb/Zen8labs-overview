@@ -11,6 +11,7 @@ import UserHold from "./UserHold";
 import Mess from "./Mess";
 import UserMessage from "./UserMessage";
 import Search from "../../components/Search";
+import { IGroup } from "../../interfaces/group";
 
 export interface IMess {
   message: string | null | undefined;
@@ -46,7 +47,7 @@ export default function Chat() {
   const [userId, setUserId] = useState<number | null>();
   const [mess, setMess] = useState<IMess[]>([]);
   const [message, setMessage] = useState("");
-  const [receiver, setReceiver] = useState<IReceiver>();
+  const [receiver, setReceiver] = useState<IReceiver | null>(null);
   const [offset, setOffset] = useState<number>(0);
   const [statusSend, setStatusSend] = useState<boolean>(false);
   const [listUserOnline, setListUserOnline] = useState<number[]>([]);
@@ -199,6 +200,7 @@ export default function Chat() {
         });
     }
   };
+  console.log(receiver);
 
   return (
     <>
@@ -235,6 +237,15 @@ export default function Chat() {
                   setScrollHeight(0);
                 }
               }}
+              handleCreateGroup={(value: IGroup) => {
+                setReceiver({
+                  id: value.id,
+                  name: value.name,
+                  avatar: "",
+                  isGroup: true,
+                  groupId: value.id,
+                });
+              }}
             />
           </div>
         </Col>
@@ -250,6 +261,9 @@ export default function Chat() {
                       : listUserOnline.includes(receiver.id)
                   }
                   receiver={receiver}
+                  deleteGroupSuccess={() => {
+                    setReceiver(null);
+                  }}
                 />
                 <div
                   className="box-chat_message pt-2 d-flex flex-column justify-content-start"

@@ -8,3 +8,4 @@ groupRouter.get("/search", authenticate, GroupController.searchGroup);
 groupRouter.get("/:id", authenticate, GroupController.getDetailGroup);
 groupRouter.post("/", authenticate, GroupController.createGroup);
 groupRouter.put("/:id", authenticate, GroupController.updateGroup);
+groupRouter.delete("/:id", authenticate, GroupController.deleteGroup);

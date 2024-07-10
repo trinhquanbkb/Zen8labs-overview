@@ -8,6 +8,7 @@ import {
   useUpdateGroupMutation,
 } from "../../../api/groupApi";
 import { toast } from "react-toastify";
+import { IUserInGroup } from "../../../interfaces/group";
 
 interface IProps {
   show: boolean;
@@ -31,7 +32,7 @@ export default function ModalInvite({ show, handleShow, groupId }: IProps) {
 
   useEffect(() => {
     if (dataSearchUser && dataGroup) {
-      const userInGroup = dataGroup.users.map((item) => item.id);
+      const userInGroup = dataGroup.users.map((item: IUserInGroup) => item.id);
       const listOption: Option[] = dataSearchUser
         .filter((item) => !userInGroup.includes(item.id))
         .map((item) => {

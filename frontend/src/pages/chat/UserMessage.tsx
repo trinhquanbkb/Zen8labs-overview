@@ -23,6 +23,7 @@ interface IUserMessage {
   onChooseUser: any;
   listUserOnline: any;
   keyword: string;
+  handleCreateGroup: any;
 }
 
 const UserMess = ({ avatar, name, chat, onChooseUser, online }: IUserMess) => {
@@ -64,6 +65,7 @@ export default function UserMessage({
   onChooseUser,
   listUserOnline,
   keyword,
+  handleCreateGroup,
 }: IUserMessage) {
   const [form, setForm] = useState(false);
   const [showModalGroup, setShowModalGroup] = useState<boolean>(false);
@@ -163,6 +165,9 @@ export default function UserMessage({
       <ModalCreateGroup
         show={showModalGroup}
         handleShow={(value: boolean) => setShowModalGroup(value)}
+        handleCreateSuccess={(value: IGroup) => {
+          handleCreateGroup(value);
+        }}
       />
     </>
   );

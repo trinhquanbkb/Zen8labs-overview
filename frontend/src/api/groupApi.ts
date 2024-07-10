@@ -60,6 +60,16 @@ const groupsApi = api.injectEndpoints({
         { type: "Group", id: "DETAIL" },
       ],
     }),
+    deleteGroup: build.mutation<any, { id: number }>({
+      query: ({ id }) => ({
+        url: `/groups/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [
+        { type: "Group", id: "SEARCH" },
+        { type: "Group", id: "DETAIL" },
+      ],
+    }),
   }),
 });
 
@@ -68,4 +78,5 @@ export const {
   useCreateGroupMutation,
   useGetDetailGroupQuery,
   useUpdateGroupMutation,
+  useDeleteGroupMutation,
 } = groupsApi;

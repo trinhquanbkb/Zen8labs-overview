@@ -49,20 +49,24 @@ const searchGroup = async (keyword: string, user_id: number) => {
       user_id: user_id,
     },
   });
-  const userGroupId = userGroup.map((group: any) => {
-    return group.dataValues.group_id;
-  });
+  if (userGroup.length > 0) {
+    const userGroupId = userGroup.map((group: any) => {
+      return group.dataValues.group_id;
+    });
 
-  const groups = await db.groups.findAll({
-    where: {
-      name: { [Op.iLike]: `%${keyword}%` },
-      id: {
-        [Op.or]: userGroupId,
+    const groups = await db.groups.findAll({
+      where: {
+        name: { [Op.iLike]: `%${keyword}%` },
+        id: {
+          [Op.or]: userGroupId,
+        },
+        is_delete: false,
       },
-      is_delete: false,
-    },
-  });
-  return groups;
+    });
+    return groups;
+  } else {
+    return [];
+  }
 };
 
 const createGroup = async (req: any) => {
@@ -133,10 +137,22 @@ const updateGroup = async (id: number, data: any) => {
   );
 };
 
+const deleteGroup = async (id: number) => {
+  return await db.groups.update(
+    { is_delete: true },
+    {
+      where: {
+        id: id,
+      },
+    }
+  );
+};
+
 export const groupService = {
   getDetailGroup,
   getListGroup,
   searchGroup,
   createGroup,
   updateGroup,
+  deleteGroup,
 };

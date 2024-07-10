@@ -5,10 +5,12 @@ import { Typeahead } from "react-bootstrap-typeahead";
 import { useGetAllUsersQuery } from "../../../api/userApi";
 import { useCreateGroupMutation } from "../../../api/groupApi";
 import { toast } from "react-toastify";
+import { useCookies } from "react-cookie";
 
 interface IModalCreateGroup {
   show: boolean;
   handleShow: any;
+  handleCreateSuccess: any;
 }
 
 interface Option {
@@ -20,10 +22,13 @@ interface Option {
 export default function ModalCreateGroup({
   show,
   handleShow,
+  handleCreateSuccess,
 }: IModalCreateGroup) {
   const [multiSelections, setMultiSelections] = useState<Option[]>([]);
   const [options, setOptions] = useState<Option[]>();
   const [nameGroup, setNameGroup] = useState("");
+  const [cookies] = useCookies();
+  const [userId, setUserId] = useState();
 
   const { data: dataSearchUser } = useGetAllUsersQuery();
   const [createGroupApi] = useCreateGroupMutation();
@@ -37,20 +42,26 @@ export default function ModalCreateGroup({
     }
   }, [dataSearchUser]);
 
+  useEffect(() => {
+    if (cookies.user_infor) {
+      setUserId(cookies.user_infor.id);
+    }
+  }, [cookies]);
+
   const onChangeMultipleSelection = (selected: Option[]) => {
     setMultiSelections(selected);
   };
 
   const onSubmit = async () => {
-    if (multiSelections.length <= 2) {
-      toast.warning("Cannot create group with quantity users < 2!");
+    if (multiSelections.length < 2) {
+      toast.warning("Cannot create group with quantity users < 3");
     } else if (nameGroup === "") {
-      toast.warning("Need fill name group"!);
+      toast.warning("Need fill name group");
     } else {
       const result = await createGroupApi({
         avatar: null,
         name: nameGroup,
-        users: multiSelections.map((item) => item.id),
+        users: [...multiSelections.map((item) => item.id), userId],
       });
       if (!result) {
         toast.error("Error server: Cannot create new group!");
@@ -58,6 +69,7 @@ export default function ModalCreateGroup({
         toast.success("Create new group success!");
         setMultiSelections([]);
         setNameGroup("");
+        handleCreateSuccess(result.data);
         handleShow(false);
       }
     }

@@ -37,19 +37,19 @@ const initSocket = (app: Express.Application): HTTPServer => {
           const newMess = await messageService.createMessage({
             content: data.message,
             user_id: data.sender_id,
-            group_id: group.dataValues.id,
+            group_id: group.id,
           });
           const user = await UserService.getDetailUser({
             id: data.sender_id,
             blocked: false,
             deleted: false,
           });
-          socket.to("group_" + group.dataValues.id).emit("sendDataServer", {
+          socket.to("group_" + group.id).emit("sendDataServer", {
             receiver_id: data.receiver_id,
             message: data.message,
             created_at: newMess.created_at,
             updated_at: newMess.updated_at,
-            group_id: group.dataValues.id,
+            group_id: group.id,
             user: {
               id: user.dataValues.id,
               full_name: user.dataValues.full_name,

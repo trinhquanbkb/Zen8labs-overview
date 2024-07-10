@@ -11,9 +11,14 @@ import ModalDeleteGroup from "./Modals/ModalDeleteGroup";
 interface ITopMessageBox {
   receiver: IReceiver;
   online: boolean;
+  deleteGroupSuccess: any;
 }
 
-export default function TopMessageBox({ receiver, online }: ITopMessageBox) {
+export default function TopMessageBox({
+  receiver,
+  online,
+  deleteGroupSuccess,
+}: ITopMessageBox) {
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const [showModalInformation, setShowModalInformation] =
     useState<boolean>(false);
@@ -78,7 +83,7 @@ export default function TopMessageBox({ receiver, online }: ITopMessageBox) {
                       friends
                     </Dropdown.Item>
                     <Dropdown.Item onClick={() => setShowModalDelete(true)}>
-                      <i className="bi bi-trash fs-16 me-2"></i>Delete group
+                      <i className="bi bi-arrow-return-left fs-16 me-2"></i>Out group
                     </Dropdown.Item>
                   </>
                 ) : (
@@ -119,6 +124,7 @@ export default function TopMessageBox({ receiver, online }: ITopMessageBox) {
         groupId={receiver.groupId}
         show={showModalDelete}
         handleShow={(value: boolean) => setShowModalDelete(value)}
+        handleOutGroup={() => deleteGroupSuccess()}
       />
     </div>
   );
