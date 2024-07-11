@@ -63,6 +63,11 @@ const initSocket = (app: Express.Application): HTTPServer => {
             data.receiver_id,
             data.sender_id
           );
+        const user = await UserService.getDetailUser({
+          id: data.sender_id,
+          blocked: false,
+          deleted: false,
+        });
         if (convertation) {
           // create new message
           const newMess = await messageService.createMessage({
@@ -76,6 +81,11 @@ const initSocket = (app: Express.Application): HTTPServer => {
             message: data.message,
             created_at: newMess.created_at,
             updated_at: newMess.updated_at,
+            group_id: null,
+            user: {
+              id: user.dataValues.id,
+              full_name: user.dataValues.full_name,
+            },
           });
         } else {
           // create new convertation
@@ -95,6 +105,11 @@ const initSocket = (app: Express.Application): HTTPServer => {
             message: data.message,
             created_at: newMess.created_at,
             updated_at: newMess.updated_at,
+            group_id: null,
+            user: {
+              id: user.dataValues.id,
+              full_name: user.dataValues.full_name,
+            },
           });
         }
       }

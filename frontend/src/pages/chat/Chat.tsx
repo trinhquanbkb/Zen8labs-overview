@@ -38,6 +38,7 @@ export default function Chat() {
   // ref
   const chatContainerRef = useRef<any>();
   const socketRef = useRef<Socket | null>();
+  const receiverRef = useRef<IReceiver | null>(null);
 
   // cookie
   const [cookies] = useCookies();
@@ -73,7 +74,12 @@ export default function Chat() {
         // setId(String(socketRef.current!.id));
       });
       socketRef.current.on("sendDataServer", (dataGot) => {
-        setMess((oldMsgs) => [...oldMsgs, dataGot]);
+        const currentReceiver = receiverRef.current;
+        if (currentReceiver && currentReceiver.isGroup && dataGot.group_id) {
+          setMess((oldMsgs) => [...oldMsgs, dataGot]);
+        } else if (currentReceiver && !currentReceiver.isGroup && !dataGot.group_id) {
+          setMess((oldMsgs) => [...oldMsgs, dataGot]);
+        }
       });
       socketRef.current.on("sendOnlineAccount", (userId) => {
         setListUserOnline([...userId]);
@@ -89,6 +95,10 @@ export default function Chat() {
       };
     }
   }, []);
+
+  useEffect(() => {
+    receiverRef.current = receiver;
+  }, [receiver]);
 
   useEffect(() => {
     if (data && userId && socketRef.current) {

@@ -10,6 +10,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { getAccessToken, getRefreshToken } from "./utils/getToken";
 import { jwtDecode } from "jwt-decode";
 import { Cookies } from "react-cookie";
+import { messaging } from "./firebase";
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_HOST;
 
@@ -73,6 +74,18 @@ axios.interceptors.response.use(
     });
   }
 );
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .register("/firebase-messaging-sw.js")
+    .then(function (registration) {
+      console.log("Registration successful, scope is:", registration.scope);
+      messaging.useServiceWorker(registration);
+    })
+    .catch(function (err) {
+      console.log("Service worker registration failed, error:", err);
+    });
+}
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

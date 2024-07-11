@@ -46,9 +46,9 @@ export default function ForgetPassword() {
         await apiSendMail({ mail: formData.email });
       },
       {
-        pending: "Promise is pending",
-        success: "Send email success!",
-        error: "Send email error!",
+        pending: "Promise send email is pending",
+        success: "Send email success, let check!",
+        error: "Send email error, send again!",
       }
     );
   };
