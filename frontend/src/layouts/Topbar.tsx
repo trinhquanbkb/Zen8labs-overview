@@ -10,6 +10,7 @@ import { ProfileMenus } from "../constants/menu";
 import { useCookies } from "react-cookie";
 import { truncateString } from "../utils/function";
 import { UserInforCookie } from "../interfaces/users";
+import NotificationDropdown from "../components/NotificationDropdown";
 
 export interface NotificationItem {
   id: number;
@@ -23,6 +24,47 @@ export interface NotificationItem {
 interface TopbarProps {
   topbarDark: boolean;
 }
+
+const notifications: NotificationItem[] = [
+  {
+    id: 1,
+    text: "Cristina Pride",
+    subText: "Hi, How are you? What about our next meeting",
+  },
+  {
+    id: 2,
+    text: "Caleb Flakelar commented on Admin",
+    subText: "1 min ago",
+    icon: "uil uil-comment-message",
+    bgColor: "primary",
+  },
+  {
+    id: 3,
+    text: "Karen Robinson",
+    subText: "Wow ! this admin looks good and awesome design",
+  },
+  {
+    id: 4,
+    text: "New user registered.",
+    subText: "5 hours ago",
+    icon: "uil uil-user-plus",
+    bgColor: "warning",
+  },
+  {
+    id: 5,
+    text: "Caleb Flakelar commented on Admin",
+    subText: "1 min ago",
+    icon: "uil uil-comment-message",
+    bgColor: "info",
+  },
+  {
+    id: 6,
+    text: "Carlos Crouch liked Admin",
+    subText: "13 days ago",
+    icon: "uil uil-heart",
+    bgColor: "secondary",
+  },
+];
 
 const Topbar = ({ topbarDark }: TopbarProps) => {
   const [cookies] = useCookies();
@@ -62,14 +104,17 @@ const Topbar = ({ topbarDark }: TopbarProps) => {
           </ul>
           <div className="w-100 d-flex justify-content-end me-4">
             <div className="d-flex flex-column justify-content-center text-light cursor-pointer">
-              <ProfileDropdown
-                profilePic={profilePic}
-                menuItems={ProfileMenus}
-                username={truncateString(
-                  userInfor?.first_name + " " + userInfor?.last_name,
-                  15
-                )}
-              />
+              <div className="d-flex flex-row justify-content-between">
+                <NotificationDropdown notifications={notifications} />
+                <ProfileDropdown
+                  profilePic={profilePic}
+                  menuItems={ProfileMenus}
+                  username={truncateString(
+                    userInfor?.first_name + " " + userInfor?.last_name,
+                    15
+                  )}
+                />
+              </div>
             </div>
           </div>
         </div>

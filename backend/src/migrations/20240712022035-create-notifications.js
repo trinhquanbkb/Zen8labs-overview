@@ -12,6 +12,9 @@ module.exports = {
       content: {
         type: Sequelize.STRING,
       },
+      title: {
+        type: Sequelize.STRING,
+      },
       sender_id: {
         type: Sequelize.STRING,
       },

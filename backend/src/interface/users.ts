@@ -10,6 +10,7 @@ export interface UsersModel {
   password: string;
   avatar?: string;
   role_id: number;
+  token_fcm?: string;
   deleted?: boolean;
   socket?: string;
   blocked?: boolean;
@@ -30,6 +31,7 @@ export interface IUserResponse {
   email: string;
   phone?: string;
   address?: string;
+  token_fcm?: string;
   avatar?: string;
   created_at?: Date;
   updated_at?: Date;
@@ -45,7 +47,7 @@ export interface IUserResponse {
 }
 
 export interface IUserRequest {
-  id?: number;
+  id?: any;
   first_name?: string;
   last_name?: string;
   nick_name?: string;
@@ -55,6 +57,7 @@ export interface IUserRequest {
   email?: string;
   phone?: string;
   address?: string;
+  token_fcm?: string;
   deleted?: boolean;
   blocked?: boolean;
   created_at?: Date;

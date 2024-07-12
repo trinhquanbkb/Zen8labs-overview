@@ -5,9 +5,13 @@ import { useUpdateUserMutation } from "../../api/userApi";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useSendNotificationMutation } from "../../api/notification";
+import { Cookies } from "react-cookie";
 
 export default function FormEditUser(data: { data: ICardInforUser2 }) {
   const [updateUserApi] = useUpdateUserMutation();
+  const [pushNotificationApi] = useSendNotificationMutation();
+  let cookies: any = new Cookies();
 
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -41,6 +45,31 @@ export default function FormEditUser(data: { data: ICardInforUser2 }) {
       const result = await updateUserApi({ id: data.data.id, ...values });
       if (result.data) {
         toast.success("Update user success!");
+        // cookies.set("user_infor", JSON.stringify(credentials.user_infor), {
+        //   path: "/",
+        // });
+        let cookiesUser = JSON.parse(cookies.cookies.user_infor);
+        cookies.set(
+          "user_infor",
+          JSON.stringify({
+            ...cookiesUser,
+            first_name: formik.values.first_name,
+            last_name: formik.values.last_name,
+            full_name: formik.values.first_name + " " + formik.values.last_name,
+            nick_name: formik.values.nick_name,
+          }),
+          {
+            path: "/",
+          }
+        );
+        await pushNotificationApi({
+          notification: {
+            title: "Update profile",
+            body: `${
+              formik.values.first_name + " " + formik.values.last_name
+            } updated profile `,
+          },
+        });
       } else {
         toast.error("Update user error!");
       }
@@ -72,7 +101,6 @@ export default function FormEditUser(data: { data: ICardInforUser2 }) {
 
     return `${year}-${month}-${day}`;
   };
-  console.log(formik.values);
 
   return (
     <div>

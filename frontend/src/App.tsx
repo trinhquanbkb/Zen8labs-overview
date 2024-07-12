@@ -3,21 +3,16 @@ import Router from "./routes/Router";
 import "./assets/scss/Theme.scss";
 import { messaging, getToken, onMessage } from "./firebase";
 import { toast } from "react-toastify";
+import { useSetTokenFCMMutation } from "./api/notification";
 
 const App = () => {
+  const [apiSetTokenFCM] = useSetTokenFCMMutation();
+
   useEffect(() => {
     getToken(messaging, { vapidKey: process.env.REACT_APP_FIREBASE_API_KEY })
-      .then((currentToken) => {
+      .then(async (currentToken) => {
         if (currentToken) {
-          console.log(currentToken);
-          // Gửi token này lên server để lưu trữ và sử dụng sau này
-          // fetch('/api/save-token', {
-          //   method: 'POST',
-          //   body: JSON.stringify({ token: currentToken }),
-          //   headers: {
-          //     'Content-Type': 'application/json'
-          //   }
-          // });
+          await apiSetTokenFCM({ token_fcm: currentToken });
         } else {
           console.log(
             "No registration token available. Request permission to generate one."
