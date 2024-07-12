@@ -14,6 +14,7 @@ export class users extends Model {
   public role_id!: number;
   public deleted!: boolean;
   public blocked!: boolean;
+  public token_fcm!: boolean;
   public socket!: string;
   public code!: string;
   public last_online!: Date;
@@ -54,6 +55,7 @@ export default (sequelize: Sequelize) => {
       avatar: DataTypes.STRING,
       code: DataTypes.STRING,
       role_id: DataTypes.INTEGER,
+      token_fcm: DataTypes.STRING,
       deleted: DataTypes.BOOLEAN,
       blocked: DataTypes.BOOLEAN,
       socket: DataTypes.STRING,

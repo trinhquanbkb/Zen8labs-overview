@@ -59,6 +59,9 @@ module.exports = {
       about: {
         type: Sequelize.STRING,
       },
+      token_fcm: {
+        type: Sequelize.STRING,
+      },
       last_online: {
         allowNull: false,
         type: Sequelize.DATE,
