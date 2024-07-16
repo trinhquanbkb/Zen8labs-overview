@@ -11,6 +11,7 @@ import { useCookies } from "react-cookie";
 import { truncateString } from "../utils/function";
 import { UserInforCookie } from "../interfaces/users";
 import NotificationDropdown from "../components/NotificationDropdown";
+import { useGetListNotificationQuery } from "../api/notification";
 
 export interface NotificationItem {
   id: number;
@@ -25,50 +26,11 @@ interface TopbarProps {
   topbarDark: boolean;
 }
 
-const notifications: NotificationItem[] = [
-  {
-    id: 1,
-    text: "Cristina Pride",
-    subText: "Hi, How are you? What about our next meeting",
-  },
-  {
-    id: 2,
-    text: "Caleb Flakelar commented on Admin",
-    subText: "1 min ago",
-    icon: "uil uil-comment-message",
-    bgColor: "primary",
-  },
-  {
-    id: 3,
-    text: "Karen Robinson",
-    subText: "Wow ! this admin looks good and awesome design",
-  },
-  {
-    id: 4,
-    text: "New user registered.",
-    subText: "5 hours ago",
-    icon: "uil uil-user-plus",
-    bgColor: "warning",
-  },
-  {
-    id: 5,
-    text: "Caleb Flakelar commented on Admin",
-    subText: "1 min ago",
-    icon: "uil uil-comment-message",
-    bgColor: "info",
-  },
-  {
-    id: 6,
-    text: "Carlos Crouch liked Admin",
-    subText: "13 days ago",
-    icon: "uil uil-heart",
-    bgColor: "secondary",
-  },
-];
-
 const Topbar = ({ topbarDark }: TopbarProps) => {
   const [cookies] = useCookies();
   const [userInfor, setUserInfor] = useState<UserInforCookie>();
+  const { data: listNotification, isFetching: fetchingNotification } =
+    useGetListNotificationQuery(null);
 
   useEffect(() => {
     setUserInfor(cookies ? cookies.user_infor : null);
@@ -105,7 +67,17 @@ const Topbar = ({ topbarDark }: TopbarProps) => {
           <div className="w-100 d-flex justify-content-end me-4">
             <div className="d-flex flex-column justify-content-center text-light cursor-pointer">
               <div className="d-flex flex-row justify-content-between">
-                <NotificationDropdown notifications={notifications} />
+                {!fetchingNotification && listNotification ? (
+                  <NotificationDropdown
+                    notifications={listNotification.map((item) => {
+                      return {
+                        title: item.title,
+                        body: item.content,
+                        created_at: new Date(item.created_at),
+                      };
+                    })}
+                  />
+                ) : null}
                 <ProfileDropdown
                   profilePic={profilePic}
                   menuItems={ProfileMenus}

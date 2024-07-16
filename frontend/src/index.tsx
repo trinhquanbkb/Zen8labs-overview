@@ -47,7 +47,7 @@ axios.interceptors.response.use(
               cookies.set("access_token", res.token.access_token, {
                 path: "/",
               });
-              cookies.set("user", jwtDecode(res.token.access_token), {
+              cookies.set("user_infor", jwtDecode(res.token.access_token), {
                 path: "/",
               });
               cookies.set("refresh_token", res.token.refresh_token, {

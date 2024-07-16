@@ -3,11 +3,18 @@ import { INotificationRequest } from "../interface/interface";
 import db from "../models";
 import { Op } from "sequelize";
 
-const getListNotification = async (req: IConvertationRequest) => {
+const getListNotification = async (
+  req: IConvertationRequest,
+  user_id: number
+) => {
   return await db.notifications.findAll({
     where: {
       ...req,
+      sender_id: {
+        [Op.not]: user_id,
+      },
     },
+    order: [["updated_at", "DESC"]],
   });
 };
 
@@ -23,7 +30,6 @@ const createNotification = async (req: INotificationRequest) => {
   return await db.notifications.create({
     content: req.content,
     title: req.title,
-    date: req.date,
     sender_id: req.sender_id,
   });
 };

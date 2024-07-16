@@ -34,6 +34,7 @@ authRouter.get(
   }),
   (req, res) => {
     const token = UserService.createToken(req.user as UsersModel);
+    console.log(token.dataStoredInToken);
     res.cookie("access_token", token.access_token);
     res.cookie("refresh_token", token.refresh_token);
     res.cookie("user_infor", token.dataStoredInToken);

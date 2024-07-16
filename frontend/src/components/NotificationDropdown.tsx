@@ -5,11 +5,11 @@ import classNames from "classnames";
 import FeatherIcon from "feather-icons-react";
 import logoImg from "../assets/images/logo_chat.png";
 
-// types
-import { NotificationItem } from "../layouts/Topbar";
-
 // components
 import Scrollbar from "./Scrollbar";
+import { onMessage } from "firebase/messaging";
+import { messaging } from "../firebase";
+import { convertISOToDDMMYY } from "../utils/function";
 
 // notifiaction continer styles
 const notificationContainerStyle = {
@@ -21,8 +21,14 @@ const notificationShowContainerStyle = {
   maxHeight: "300px",
 };
 
+interface INoti {
+  title: string;
+  body: string;
+  created_at: Date;
+}
+
 interface NotificationDropdownProps {
-  notifications: Array<NotificationItem>;
+  notifications: INoti[];
 }
 
 interface NotificationContainerStyle {
@@ -31,6 +37,9 @@ interface NotificationContainerStyle {
 }
 
 const NotificationDropdown = (props: NotificationDropdownProps) => {
+  const [notifications, setNotifications] = useState<INoti[]>(
+    props.notifications
+  );
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const [notificationContentStyle, setNotificationContentStyles] =
     useState<NotificationContainerStyle>(notificationContainerStyle);
@@ -46,6 +55,17 @@ const NotificationDropdown = (props: NotificationDropdownProps) => {
         : notificationContainerStyle
     );
   };
+
+  onMessage(messaging, (payload: any) => {
+    setNotifications([
+      {
+        created_at: new Date(),
+        title: payload.notification.title,
+        body: payload.notification.body,
+      },
+      ...notifications,
+    ]);
+  });
 
   return (
     <Dropdown
@@ -72,12 +92,12 @@ const NotificationDropdown = (props: NotificationDropdownProps) => {
           className="badge bg-danger rounded-circle noti-icon-badge position-absolute"
           style={{ right: "-6px", top: "-6px" }}
         >
-          6
+          {notifications.length}
         </span>
       </Dropdown.Toggle>
       <Dropdown.Menu
         className="dropdown-menu-end dropdown-lg"
-        style={{ width: "320px !important", border: "1px solid #e9e9e9" }}
+        style={{ width: "380px !important", border: "1px solid #e9e9e9" }}
       >
         <div onClick={toggleDropdown}>
           <div className="dropdown-item noti-title">
@@ -87,7 +107,7 @@ const NotificationDropdown = (props: NotificationDropdownProps) => {
             </h5>
           </div>
           <Scrollbar style={notificationContentStyle}>
-            {(props.notifications || []).map((item, i) => {
+            {(notifications || []).map((item, i) => {
               return (
                 <Link
                   to="#"
@@ -102,10 +122,15 @@ const NotificationDropdown = (props: NotificationDropdownProps) => {
                     />
                   </div>
                   <div className="d-flex flex-column ms-2">
-                    <p className="notify-details fw-bold mb-1">Nguời gửi</p>
+                    <p className="notify-details fw-bold mb-0 break-word-noti">
+                      {item.title}
+                      <span className="fw-normal" style={{ fontSize: "13px" }}>
+                        {" ("}
+                        {convertISOToDDMMYY(item.created_at.toString())} {")"}
+                      </span>
+                    </p>
                     <p className="text-muted mb-0 user-msg break-word-noti">
-                      Hello Hello Hello Hello Hello Hello Hello Hello Hello
-                      Hello Hello Hello
+                      {item.body}
                     </p>
                   </div>
                 </Link>

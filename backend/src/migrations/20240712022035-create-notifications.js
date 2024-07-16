@@ -16,7 +16,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       sender_id: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
       },
       created_at: {
         allowNull: false,

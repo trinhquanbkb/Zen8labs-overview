@@ -38,11 +38,17 @@ export const convertISOToDDMMYY = (isoTimeStr: string) => {
   let day = date.getUTCDate();
   let month = date.getUTCMonth() + 1;
   let year = date.getUTCFullYear().toString();
+  let hours = date.getUTCHours();
+  let minutes = date.getUTCMinutes();
+  let seconds = date.getUTCSeconds();
 
   let dayConvert = day < 10 ? "0" + day.toString() : day.toString();
   let monthConvert = month < 10 ? "0" + month.toString() : month.toString();
+  let hoursC = hours < 10 ? "0" + hours : hours;
+  let minutesC = minutes < 10 ? "0" + minutes : minutes;
+  let secondsC = seconds < 10 ? "0" + seconds : seconds;
 
-  return `${dayConvert}-${monthConvert}-${year}`;
+  return `${dayConvert}-${monthConvert}-${year} ${hoursC}:${minutesC}:${secondsC}`;
 };
 
 export const convertTimeToICT = (isoTimeStr: string) => {

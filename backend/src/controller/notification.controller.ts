@@ -18,7 +18,10 @@ admin.initializeApp({
 const pushNotification = async (registrationToken: string, message: any) => {
   const messageSend = {
     token: registrationToken,
-    notification: message,
+    notification: {
+      title: message.title,
+      body: message.content,
+    },
   };
 
   admin
@@ -82,9 +85,10 @@ const sendNotification = async (req: Request, res: Response) => {
       .map((item) => {
         return item.token_fcm;
       });
+    const listTokenFCMUnique = [...new Set(listTokenFCM)];
 
     await Promise.all(
-      listTokenFCM.map(async (registrationToken: string) => {
+      listTokenFCMUnique.map(async (registrationToken: string) => {
         return await pushNotification(registrationToken, req.body.notification);
       })
     );
@@ -94,7 +98,28 @@ const sendNotification = async (req: Request, res: Response) => {
   }
 };
 
+const getNotificationOwn = async (req: Request, res: Response) => {
+  try {
+    const access_token = req.headers.authorization
+      ? req.headers.authorization.split("Bearer ")[1]
+      : "";
+    // decode token
+    const decode: any = jwt.verify(
+      access_token,
+      process.env.HASH_ACCESS_TOKEN as string
+    );
+    const listNotifications = await notificationService.getListNotification(
+      {},
+      decode.id
+    );
+    res.status(200).send(listNotifications);
+  } catch (error) {
+    res.status(500).send(`${error}`);
+  }
+};
+
 export const NotificationController = {
   setTokenFCM,
   sendNotification,
+  getNotificationOwn,
 };

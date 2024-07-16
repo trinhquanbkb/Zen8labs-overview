@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import Router from "./routes/Router";
 import "./assets/scss/Theme.scss";
-import { messaging, getToken, onMessage } from "./firebase";
-import { toast } from "react-toastify";
+import { messaging, getToken } from "./firebase";
 import { useSetTokenFCMMutation } from "./api/notification";
 
 const App = () => {
@@ -22,12 +21,6 @@ const App = () => {
       .catch((err) => {
         console.log("An error occurred while retrieving token. ", err);
       });
-
-    onMessage(messaging, (payload: any) => {
-      console.log("Message received. ", payload);
-      // Hiển thị thông báo khi nhận được tin nhắn
-      toast.success(payload.notification.body);
-    });
   }, []);
 
   return (
