@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import admin from "firebase-admin";
 import { Op } from "sequelize";
 import { UserService } from "../service/user.service";
 import { notificationService } from "../service/notification.service";
 import { serviceAccount } from "../config/push-notification-4880b-firebase-adminsdk-d9a5t-db84643803";
+import { decodeToken } from "../utils/functions/decodeToken";
 
 dotenv.config();
 
@@ -37,14 +37,7 @@ const pushNotification = async (registrationToken: string, message: any) => {
 
 const setTokenFCM = async (req: Request, res: Response) => {
   try {
-    const access_token = req.headers.authorization
-      ? req.headers.authorization.split("Bearer ")[1]
-      : "";
-    // decode token
-    const decode: any = jwt.verify(
-      access_token,
-      process.env.HASH_ACCESS_TOKEN as string
-    );
+    const decode: any = decodeToken(req);
     await UserService.updateUser(
       { token_fcm: req.body.token_fcm },
       { id: decode.id }
@@ -58,14 +51,7 @@ const setTokenFCM = async (req: Request, res: Response) => {
 
 const sendNotification = async (req: Request, res: Response) => {
   try {
-    const access_token = req.headers.authorization
-      ? req.headers.authorization.split("Bearer ")[1]
-      : "";
-    // decode token
-    const decode: any = jwt.verify(
-      access_token,
-      process.env.HASH_ACCESS_TOKEN as string
-    );
+    const decode: any = decodeToken(req);
     await notificationService.createNotification({
       ...req.body.notification,
       sender_id: decode.id,
@@ -100,14 +86,7 @@ const sendNotification = async (req: Request, res: Response) => {
 
 const getNotificationOwn = async (req: Request, res: Response) => {
   try {
-    const access_token = req.headers.authorization
-      ? req.headers.authorization.split("Bearer ")[1]
-      : "";
-    // decode token
-    const decode: any = jwt.verify(
-      access_token,
-      process.env.HASH_ACCESS_TOKEN as string
-    );
+    const decode: any = decodeToken(req);
     const listNotifications = await notificationService.getListNotification(
       {},
       decode.id
