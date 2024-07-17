@@ -112,7 +112,8 @@ const sendMailForgetPassword = async (req: Request, res: Response) => {
       deleted: false,
       blocked: false,
     });
-    if (user.dataValues) {
+
+    if (user && user.dataValues) {
       const code = generateRandomString(30);
       await UserService.updateUser(
         { code: code },

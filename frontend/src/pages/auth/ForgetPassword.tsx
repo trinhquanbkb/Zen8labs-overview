@@ -41,16 +41,27 @@ export default function ForgetPassword() {
   };
 
   const onSubmit = async (formData: UserData) => {
-    toast.promise(
-      async () => {
-        await apiSendMail({ mail: formData.email });
-      },
-      {
-        pending: "Promise send email is pending",
-        success: "Send email success, let check!",
-        error: "Send email error, send again!",
-      }
-    );
+    if (!formData.email) {
+      toast.warning("Need to fill email!");
+    } else {
+      toast.promise(
+        async () => {
+          const res: any = await apiSendMail({ mail: formData.email });
+          if (res.data) {
+            toast.success("Send email success, let check!");
+          } else if (res.error) {
+            toast.error(
+              res.error?.data
+                ? res.error?.data
+                : "Send email error, send again!"
+            );
+          }
+        },
+        {
+          pending: "Promise send email is pending",
+        }
+      );
+    }
   };
 
   return (
