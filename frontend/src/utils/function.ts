@@ -35,12 +35,14 @@ export const isDifferentDay = (isoTimeStr1: string, isoTimeStr2: string) => {
 
 export const convertISOToDDMMYY = (isoTimeStr: string) => {
   let date = new Date(isoTimeStr);
-  let day = date.getUTCDate();
-  let month = date.getUTCMonth() + 1;
-  let year = date.getUTCFullYear().toString();
-  let hours = date.getUTCHours();
-  let minutes = date.getUTCMinutes();
-  let seconds = date.getUTCSeconds();
+  let ictOffset = 7 * 60;
+  let ictTime = new Date(date.getTime() + ictOffset * 60 * 1000);
+  let day = ictTime.getUTCDate();
+  let month = ictTime.getUTCMonth() + 1;
+  let year = ictTime.getUTCFullYear().toString();
+  let hours = ictTime.getUTCHours();
+  let minutes = ictTime.getUTCMinutes();
+  let seconds = ictTime.getUTCSeconds();
 
   let dayConvert = day < 10 ? "0" + day.toString() : day.toString();
   let monthConvert = month < 10 ? "0" + month.toString() : month.toString();

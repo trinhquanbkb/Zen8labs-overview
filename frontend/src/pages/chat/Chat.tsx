@@ -214,8 +214,8 @@ export default function Chat() {
   return (
     <>
       <Row>
-        <Col xs={3} md={3}>
-          <div className="chat-user-box me-0 px-3 pt-3">
+        <Col xs={12} lg={3}>
+          <div className="chat-user-box me-0 ms-0 px-3 pt-3">
             <UserHold
               name={
                 cookies.user_infor
@@ -260,8 +260,8 @@ export default function Chat() {
         </Col>
 
         {receiver ? (
-          <Col xs={9} md={9}>
-            <div className="chat-wrapper ms-0">
+          <Col xs={12} lg={9}>
+            <div className="chat-wrapper ms-0 me-0">
               <div className="chat-socket d-flex flex-column justify-content-between">
                 <TopMessageBox
                   online={

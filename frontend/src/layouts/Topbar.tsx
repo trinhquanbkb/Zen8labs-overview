@@ -42,7 +42,7 @@ const Topbar = ({ topbarDark }: TopbarProps) => {
         <div
           className={`container-full d-flex flex-row justify-content-between`}
         >
-          <ul className="list-unstyled topnav-menu topnav-menu-left float-start m-0 ps-4">
+          <ul className="list-unstyled topnav-menu topnav-menu-left float-start m-0 ps-2">
             <li>
               <Link to="/chat">
                 <img src={logoImg} alt="logo" style={{ height: "68px" }} />
@@ -64,7 +64,7 @@ const Topbar = ({ topbarDark }: TopbarProps) => {
               </Link>
             </li>
           </ul>
-          <div className="w-100 d-flex justify-content-end me-4">
+          <div className="w-100 d-flex justify-content-end me-2">
             <div className="d-flex flex-column justify-content-center text-light cursor-pointer">
               <div className="d-flex flex-row justify-content-between">
                 {!fetchingNotification && listNotification ? (
